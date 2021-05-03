@@ -1,6 +1,8 @@
-import { ApolloServer } from 'apollo-server';
+import { ApolloServer } from 'apollo-server-express';
 import { typeDefs } from './schema';
- 
+import { createServer } from 'http'; 
+import express from 'express';
+
 // The root provides a resolver function for each API endpoint
 const resolvers = {
   Query: {
@@ -8,12 +10,15 @@ const resolvers = {
   },
 };
 
+const app = express();
 const server = new ApolloServer({
   resolvers, typeDefs,
 });
 
-server
-  .listen()
-  .then(({ url }) => {
-      console.log(`Running a GraphQL API server at ${url}`);
-  });
+server.applyMiddleware({ app, path: '/graphql' });
+
+const httpServer = createServer(app);
+const PORT = 4000
+
+httpServer
+  .listen({port: PORT}, (): void => console.log(`Listenning at http://localhost:${PORT}/graphql`))
