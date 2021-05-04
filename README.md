@@ -12,4 +12,5 @@ This project have the propose to pratice and learn more about the backend's worl
 
 ## Steps to Run and Debug
 
-[TODO] Add steps to run and debug
+- Install dependencies: `npm install`
+- Run: `npm start`
