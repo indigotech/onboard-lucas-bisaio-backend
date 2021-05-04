@@ -13,4 +13,6 @@ This project have the propose to pratice and learn more about the backend's worl
 ## Steps to Run and Debug
 
 - Install dependencies: `npm install`
+- Deploy Database: `npm docker` or `docker-compose up -d`
 - Run: `npm start`
+- Lint: `npm run lint`
