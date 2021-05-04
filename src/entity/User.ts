@@ -1,16 +1,32 @@
-import { Entity, Column, PrimaryColumn } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  Connection,
+  BaseEntity,
+} from "typeorm";
 
 @Entity()
-export class User {
-  @PrimaryColumn()
+export class User extends BaseEntity {
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 100 })
-  name: string;
+  @Column()
+  firstName: string;
 
   @Column()
-  email: string;
+  lastName: string;
 
   @Column()
-  birthDate: string;
+  age: number;
+}
+
+export async function createUser(database: Connection) {
+  const user = new User();
+  user.firstName = "Joao";
+  user.lastName = "Silva";
+  user.age = 35;
+
+  const newUser = await database.manager.save(user);
+  console.log("User has been saved. user id is", newUser.id);
 }

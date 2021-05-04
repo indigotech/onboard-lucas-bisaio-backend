@@ -1,19 +1,14 @@
 import { ApolloServer } from "apollo-server-express";
-import { typeDefs } from "./schema";
+import { typeDefs, resolvers } from "./schema";
 import { createServer } from "http";
 import express from "express";
 import { configDatabase } from "./database.config";
-
-// The root provides a resolver function for each API endpoint
-const resolvers = {
-  Query: {
-    hello: () => "Hello World!",
-  },
-};
+import { createUser } from "./entity";
 
 configDatabase()
-  .then((response) => {
-    console.log("Database setted up");
+  .then(async (database) => {
+    console.log("DB configured");
+    await createUser(database);
   })
   .catch(console.log);
 

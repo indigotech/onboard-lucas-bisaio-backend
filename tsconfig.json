@@ -6,6 +6,7 @@
     "lib": ["dom","es6"],
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
     "outDir": "dist",
     "rootDir": "src",
     "removeComments": true,

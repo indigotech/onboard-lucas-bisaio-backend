@@ -7,7 +7,7 @@ localdb:
   environment:
     - POSTGRES_USER=root
     - POSTGRES_PASSWORD=admin
-    - POSTGRES_DB=postgre
+    - POSTGRES_DB=ondoard
 
 testdb:
   image: postgres:11.2
@@ -18,4 +18,4 @@ testdb:
   environment:
     - POSTGRES_USER=root
     - POSTGRES_PASSWORD=admin
-    - POSTGRES_DB=test_postgre
+    - POSTGRES_DB=test_ondoard
