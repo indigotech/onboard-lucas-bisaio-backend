@@ -8,7 +8,7 @@ export async function configDatabase(): Promise<Connection> {
     username: "root",
     password: "admin",
     database: "ondoard",
-    entities: [__dirname + "/entity/*.js"],
+    entities: [__dirname + "/entity/*.ts"],
     synchronize: true,
   });
   return connection;
