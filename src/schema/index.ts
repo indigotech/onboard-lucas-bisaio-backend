@@ -1,26 +1,24 @@
 import { gql } from "apollo-server";
 
-interface User {
-  user: {
-    id: number;
-    name: string;
-    email: string;
-    birthDate: string;
-  };
+interface TypeUser {
+  id: number;
+  name: string;
+  email: string;
+  birthDate?: string;
 }
 
 export const typeDefs = gql`
   input UserInput {
-    name: String
-    email: String
-    password: String
+    name: String!
+    email: String!
+    password: String!
     birthDate: String
   }
 
   type User {
-    id: ID
-    name: String
-    email: String
+    id: ID!
+    name: String!
+    email: String!
     birthDate: String
   }
 
@@ -39,7 +37,7 @@ export const resolvers = {
   },
 
   Mutation: {
-    createUser: (_parent: any, { user: args }: User) => {
+    createUser: (_parent: any, { user: args }: { user: TypeUser }) => {
       const user = {
         id: Math.floor(Math.random() * 10000),
         name: args.name,
