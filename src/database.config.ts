@@ -1,10 +1,8 @@
-import { Connection, createConnection } from "typeorm";
+import { createConnection } from "typeorm";
 
 export class Database {
-  static connection: Connection;
-
   static async config(): Promise<void> {
-    this.connection = await createConnection({
+    await createConnection({
       type: "postgres",
       host: "localhost",
       port: 5432,
