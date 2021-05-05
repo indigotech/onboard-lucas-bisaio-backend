@@ -24,7 +24,7 @@ export const resolvers = {
 
       const newUser = await getRepository(User).save(user);
       console.log("User has been saved. user id is", newUser.id);
-      return user;
+      return newUser;
     },
   },
 };
