@@ -14,8 +14,8 @@ This project have the propose to pratice and learn more about the backend's worl
 
 - Install dependencies: `npm install`
 - Deploy Database: `npm docker` or `docker-compose up -d`
-- Run: `npm start`
 - Build: `npm run build`
+- Run: `npm start`
 
 ## Steps to Debug
 
