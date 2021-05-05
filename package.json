@@ -4,8 +4,9 @@
   "description": "## Project Description",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon 'src/server.ts' --exec 'ts-node' src/server.ts -e ts,graphql",
+    "start": "node ./dist/server.js",
+    "build": "tsc",
+    "dev": "nodemon 'src/server.ts' --exec 'ts-node' src/server.ts -e ts,graphql",
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
     "docker": "docker-compose up -d"
   },
