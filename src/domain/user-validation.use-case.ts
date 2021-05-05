@@ -1,13 +1,13 @@
 import { User } from "../entity";
 import { UserResponse } from "../schema/typedefs";
 import { Database } from "../database.config";
-import { validatePassword } from "./password-validation.use-case";
+import { ValidatePasswordUseCase } from "./password-validation.use-case";
 import { AuthError, ErrorMessage } from "../core/error/error-messages";
 
 export async function validateUser(user: UserResponse): Promise<void> {
   const { password, email } = user;
 
-  const validPassword = validatePassword.check(password);
+  const validPassword = ValidatePasswordUseCase.exec(password);
 
   if (!validPassword) {
     throw new AuthError(ErrorMessage.password);
