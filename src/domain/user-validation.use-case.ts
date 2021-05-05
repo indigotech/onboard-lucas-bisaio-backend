@@ -1,6 +1,6 @@
+import { getRepository } from "typeorm";
 import { User } from "../entity";
 import { UserResponse } from "../schema/typedefs";
-import { Database } from "../database.config";
 import { ValidatePasswordUseCase } from "./password-validation.use-case";
 import { AuthError, ErrorMessage } from "../core/error/error-messages";
 
@@ -12,7 +12,7 @@ export async function validateUser(user: UserResponse): Promise<void> {
   if (!validPassword) {
     throw new AuthError(ErrorMessage.password);
   }
-  const repository = Database.connection.getRepository(User);
+  const repository = getRepository(User);
 
   const hasAnotherUser = await repository.findOne({ email });
   if (hasAnotherUser) {
