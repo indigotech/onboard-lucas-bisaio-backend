@@ -1,13 +1,7 @@
+import { userValidator } from "../domain/user-validation.use-case";
+import { UserResponse } from "./typedefs";
 import { User } from "../entity";
 import { getRepository } from "typeorm";
-
-interface UserResponse {
-  id: number;
-  name: string;
-  email: string;
-  password: string;
-  birthDate?: string;
-}
 
 export const resolvers = {
   Query: {
@@ -22,8 +16,15 @@ export const resolvers = {
       user.password = args.password;
       user.birthDate = args.birthDate;
 
+      const isValid = await userValidator(user);
+
+      if (!isValid) {
+        throw new Error("Tratar isso aqui! - Usuario inválido");
+      }
+
       const newUser = await getRepository(User).save(user);
-      return newUser;
+      console.log("User has been saved. user id is", newUser.id);
+      return user;
     },
   },
 };
