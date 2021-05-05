@@ -2,6 +2,7 @@ import { validateUser } from "../domain/user-validation.use-case";
 import { UserResponse } from "./typedefs";
 import { User } from "../entity";
 import { getRepository } from "typeorm";
+import { CryptoService } from "../core/security/crypto";
 
 export const resolvers = {
   Query: {
@@ -18,8 +19,9 @@ export const resolvers = {
 
       await validateUser(user);
 
+      user.password = CryptoService.encode(args.password);
+
       const newUser = await getRepository(User).save(user);
-      console.log("User has been saved. user id is", newUser.id);
       return newUser;
     },
   },
