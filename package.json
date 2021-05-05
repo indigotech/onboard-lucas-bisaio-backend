@@ -4,7 +4,8 @@
   "description": "## Project Description",
   "main": "index.js",
   "scripts": {
-    "start": "npx ts-node ./src/server.ts",
+    "start": "npm run build && node ./dist/server.js",
+    "build": "tsc",
     "dev": "nodemon 'src/server.ts' --exec 'ts-node' src/server.ts -e ts,graphql",
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
     "docker": "docker-compose up -d"
