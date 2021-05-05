@@ -1,13 +1,12 @@
 import { ApolloServer } from "apollo-server-express";
-import { typeDefs, resolvers } from "./schema";
 import { createServer } from "http";
 import express from "express";
-import { configDatabase } from "./database.config";
-import { createUser } from "./entity";
+import { typeDefs, resolvers } from "./schema";
+import { Database } from "./database.config";
 
-configDatabase()
-  .then((database) => {
-    console.log("DB configured");
+Database.config()
+  .then(() => {
+    console.log("DB configured!");
   })
   .catch(console.log);
 
