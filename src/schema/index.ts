@@ -1,6 +1,6 @@
 import { gql } from "apollo-server";
 
-interface TypeUser {
+interface UserResponse {
   id: number;
   name: string;
   email: string;
@@ -37,7 +37,7 @@ export const resolvers = {
   },
 
   Mutation: {
-    createUser: (_parent: any, { user: args }: { user: TypeUser }) => {
+    createUser: (_parent: any, { user: args }: { user: UserResponse }) => {
       const user = {
         id: Math.floor(Math.random() * 10000),
         name: args.name,

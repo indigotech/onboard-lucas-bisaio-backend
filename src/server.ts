@@ -6,9 +6,8 @@ import { configDatabase } from "./database.config";
 import { createUser } from "./entity";
 
 configDatabase()
-  .then(async (database) => {
+  .then((database) => {
     console.log("DB configured");
-    // await createUser(database);
   })
   .catch(console.log);
 
