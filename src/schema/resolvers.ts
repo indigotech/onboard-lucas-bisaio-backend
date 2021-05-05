@@ -1,10 +1,11 @@
 import { Database } from "../database.config";
 import { User } from "../entity";
 
-interface TypeUser {
+interface UserResponse {
   id: number;
   name: string;
   email: string;
+  password: string;
   birthDate?: string;
 }
 
@@ -14,10 +15,11 @@ export const resolvers = {
   },
 
   Mutation: {
-    createUser: async (_parent: any, { user: args }: { user: TypeUser }) => {
+    createUser: async (_: any, { user: args }: { user: UserResponse }) => {
       const user = new User();
       user.name = args.name;
       user.email = args.email;
+      user.password = args.password;
       user.birthDate = args.birthDate;
 
       const newUser = await Database.connection.manager.save(user);
