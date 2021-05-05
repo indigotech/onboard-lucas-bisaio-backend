@@ -1,4 +1,4 @@
-import { userValidator } from "../domain/user-validation.use-case";
+import { validateUser } from "../domain/user-validation.use-case";
 import { UserResponse } from "./typedefs";
 import { Database } from "../database.config";
 import { User } from "../entity";
@@ -16,14 +16,9 @@ export const resolvers = {
       user.password = args.password;
       user.birthDate = args.birthDate;
 
-      const isValid = await userValidator(user);
-
-      if (!isValid) {
-        throw new Error("Tratar isso aqui! - Usuario inválido");
-      }
+      await validateUser(user);
 
       const newUser = await Database.connection.manager.save(user);
-      console.log("User has been saved. user id is", newUser.id);
       return newUser;
     },
   },
