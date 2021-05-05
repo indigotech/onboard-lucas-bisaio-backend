@@ -1,5 +1,5 @@
-import { Database } from "../database.config";
 import { User } from "../entity";
+import { getRepository } from "typeorm";
 
 interface UserResponse {
   id: number;
@@ -22,7 +22,7 @@ export const resolvers = {
       user.password = args.password;
       user.birthDate = args.birthDate;
 
-      const newUser = await Database.connection.manager.save(user);
+      const newUser = await getRepository(User).save(user);
       return newUser;
     },
   },

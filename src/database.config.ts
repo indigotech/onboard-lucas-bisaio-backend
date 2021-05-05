@@ -4,7 +4,7 @@ export class Database {
   static connection: Connection;
 
   static async config(): Promise<void> {
-    const connection = await createConnection({
+    this.connection = await createConnection({
       type: "postgres",
       host: "localhost",
       port: 5432,
@@ -14,7 +14,5 @@ export class Database {
       entities: [__dirname + "/entity/*.ts"],
       synchronize: true,
     });
-
-    this.connection = connection;
   }
 }
