@@ -4,7 +4,7 @@ import express from "express";
 import { typeDefs, resolvers } from "./schema";
 import { Database } from "./database.config";
 
-Database.configDatabase()
+Database.config()
   .then(() => {
     console.log("DB configured!");
   })

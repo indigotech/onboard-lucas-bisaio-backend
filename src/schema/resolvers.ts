@@ -23,7 +23,6 @@ export const resolvers = {
       user.birthDate = args.birthDate;
 
       const newUser = await Database.connection.manager.save(user);
-      console.log("User has been saved. user id is", newUser.id);
       return newUser;
     },
   },

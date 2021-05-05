@@ -3,7 +3,7 @@ import { Connection, createConnection } from "typeorm";
 export class Database {
   static connection: Connection;
 
-  static async configDatabase(): Promise<void> {
+  static async config(): Promise<void> {
     const connection = await createConnection({
       type: "postgres",
       host: "localhost",
