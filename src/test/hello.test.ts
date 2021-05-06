@@ -1,15 +1,19 @@
-import { expect } from "chai";
 import request, { Test } from "supertest";
+import { expect } from "chai";
+import { setup } from "../server";
 
 describe("Query - Hello - GraphQL", () => {
   let agent: Test;
 
-  before("Init Server", () => {
-    agent = request("http://localhost:4000").post("/graphql");
+  before(async () => {
+    await setup();
+    agent = request(`${process.env.BASE_URL}${process.env.SERVER_PORT}`).post(
+      "/graphql"
+    );
     agent.set("Accept", "application/json");
   });
 
-  it("Hello World Query", async () => {
+  it("should return a hello world", async () => {
     const query = "{ hello }";
     const response = await agent.send({ query });
     expect(response.body.data.hello).to.be.eq("Hello World!");

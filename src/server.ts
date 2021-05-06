@@ -1,26 +1,36 @@
 import { ApolloServer } from "apollo-server-express";
 import { createServer } from "http";
 import express from "express";
+import dotenv from "dotenv";
 import { typeDefs, resolvers } from "./schema";
 import { Database } from "./database.config";
 
-Database.config()
-  .then(() => {
-    console.log("DB configured!");
-  })
-  .catch(console.log);
+export const setup = async () => {
+  dotenv.config({ path: process.env.TEST === "OK" ? "./.test.env" : "./.env" });
 
-const app = express();
-const server = new ApolloServer({
-  resolvers,
-  typeDefs,
-});
+  const configs = {
+    port: +process.env.DATABASE_PORT!,
+    username: process.env.DATABASE_USERNAME!,
+    password: process.env.DATABASE_PASSWORD!,
+    database: process.env.DATABASE_NAME!,
+  };
 
-server.applyMiddleware({ app, path: "/graphql" });
+  await Database.config(configs);
+  console.log("DB configured!");
 
-const httpServer = createServer(app);
-const PORT = 4000;
+  const app = express();
+  const server = new ApolloServer({
+    resolvers,
+    typeDefs,
+  });
 
-httpServer.listen({ port: PORT }, (): void =>
-  console.log(`Listenning at http://localhost:${PORT}/graphql`)
-);
+  server.applyMiddleware({ app, path: "/graphql" });
+
+  const httpServer = createServer(app);
+
+  const PORT = +(process.env.SERVER_PORT ?? 4000);
+
+  httpServer.listen({ port: PORT }, (): void =>
+    console.log(`Listenning at http://localhost:${PORT}/graphql`)
+  );
+};
