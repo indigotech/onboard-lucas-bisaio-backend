@@ -1,8 +1,9 @@
+const { expect } = require('chai');
 const request = require('supertest');
 
 describe('Query - Hello - GraphQL', () => {
   let agent;
-  
+
   before('Init Server', () => { 
     agent = request("http://localhost:4000").post("/graphql");
     agent.set("Accept", "application/json");
@@ -12,11 +13,12 @@ describe('Query - Hello - GraphQL', () => {
     const query = '{ hello }';
     agent
       .send({ query })
+      .expect(200)
       .end((err, res) => {
         if(err) {
           return done(err);
         }
-        console.log("response:", res.body)
+        expect(res.body.data.hello).to.be.eq('Hello World!');
         return done();
       });
   });
