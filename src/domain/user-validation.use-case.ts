@@ -10,12 +10,12 @@ export async function validateUser(user: UserResponse): Promise<void> {
   const validPassword = ValidatePasswordUseCase.exec(password);
 
   if (!validPassword) {
-    throw new AuthError(ErrorMessage.password);
+    throw new AuthError(ErrorMessage.password, 422);
   }
   const repository = getRepository(User);
 
   const hasAnotherUser = await repository.findOne({ email });
   if (hasAnotherUser) {
-    throw new AuthError(ErrorMessage.email);
+    throw new AuthError(ErrorMessage.email, 422);
   }
 }

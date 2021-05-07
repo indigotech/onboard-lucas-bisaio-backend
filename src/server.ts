@@ -4,6 +4,7 @@ import express from "express";
 import dotenv from "dotenv";
 import { typeDefs, resolvers } from "./schema";
 import { Database } from "./database.config";
+import { formatError } from "./core/error";
 
 export const setup = async () => {
   dotenv.config({ path: process.env.TEST === "OK" ? "./.test.env" : "./.env" });
@@ -22,6 +23,7 @@ export const setup = async () => {
   const server = new ApolloServer({
     resolvers,
     typeDefs,
+    formatError,
   });
 
   server.applyMiddleware({ app, path: "/graphql" });
