@@ -5,6 +5,7 @@ import { getRepository, Repository } from "typeorm";
 import { User } from "../entity";
 import { UserInput, UserResponse } from "../schema";
 import { CryptoService } from "../core/security/crypto";
+import { ErrorMessage } from "../core/error";
 
 describe("Tests - GraphQL Server", () => {
   let agent: SuperTest<Test>;
@@ -20,6 +21,9 @@ describe("Tests - GraphQL Server", () => {
     await setup();
     agent = request(`${process.env.BASE_URL}${process.env.SERVER_PORT}`);
     repository = getRepository(User);
+  });
+
+  afterEach(() => {
     repository.delete({});
   });
 
@@ -52,6 +56,24 @@ describe("Tests - GraphQL Server", () => {
 
     const hashedPassword = CryptoService.encode(input.password);
     expect(findOne?.password).to.be.eq(hashedPassword);
+  });
+
+  it("should return a error saying invalid password", async () => {
+    const user: UserInput = {
+      name: "taqtile",
+      email: "taqtiler@taqtile.com.br",
+      password: "invalid-password",
+    };
+
+    const response = await requestQuery(mutation, { data: user });
+    expect(response.body.errors[0].message).to.be.eq(ErrorMessage.password);
+    expect(response.body.errors[0].code).to.be.eq(422);
+  });
+
+  it("should return a error saying invalid email", async () => {
+    const response = await requestQuery(mutation, { data: input });
+    expect(response.body.errors[0].message).to.be.eq(ErrorMessage.email);
+    expect(response.body.errors[0].code).to.be.eq(422);
   });
 
   const requestQuery = (query: string, variables?: any): Test => {
