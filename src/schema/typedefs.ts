@@ -1,20 +1,5 @@
 import { gql } from "apollo-server";
 
-export interface UserResponse {
-  id: number;
-  name: string;
-  email: string;
-  password: string;
-  birthDate?: string;
-}
-
-export interface UserInput {
-  name: string;
-  email: string;
-  password: string;
-  birthDate?: string;
-}
-
 export const typeDefs = gql`
   input UserInput {
     name: String!
