@@ -1,8 +1,9 @@
+import { getRepository } from "typeorm";
+import { CryptoService } from "../core/security/crypto";
+import { validateLogin } from "../domain/login-validation.use-case";
 import { validateUser } from "../domain/user-validation.use-case";
 import { LoginInput, LoginType, UserInput, UserType } from "./schema.types";
 import { User } from "../entity";
-import { getRepository } from "typeorm";
-import { CryptoService } from "../core/security/crypto";
 
 export const resolvers = {
   Query: {
@@ -25,14 +26,9 @@ export const resolvers = {
       return newUser;
     },
 
-    login: async (_: any, { data: args }: { data: LoginInput }): Promise<LoginType> => {
-      const user = {
-        id: 12,
-        name: "User Name",
-        email: args.email,
-        birthDate: "04-25-1990",
-      };
-      const token = "the_token";
+    login: async (_: any, { data: args }: { data: LoginInput }) => {
+      const { token, user } = await validateLogin(args);
+
       return { token, user };
     },
   },
