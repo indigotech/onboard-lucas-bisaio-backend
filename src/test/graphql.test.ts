@@ -3,7 +3,7 @@ import { expect } from "chai";
 import { setup } from "../server";
 import { getRepository, Repository } from "typeorm";
 import { User } from "../entity";
-import { UserInput, UserResponse } from "../schema";
+import { UserInput, UserType } from "../schema";
 import { CryptoService } from "../core/security/crypto";
 import { ErrorMessage } from "../core/error";
 
@@ -48,7 +48,7 @@ describe("Tests - GraphQL Server", () => {
     const email = input.email;
     const response = await requestQuery(mutation, { data: input });
 
-    const newUser: UserResponse = response.body.data.createUser;
+    const newUser: UserType = response.body.data.createUser;
     expect(+newUser.id).to.be.greaterThan(0);
 
     const findOne = await repository.findOne({ email });
