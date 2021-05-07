@@ -4,16 +4,17 @@
   "description": "## Project Description",
   "main": "index.js",
   "scripts": {
-    "start": "node ./dist/server.js",
+    "start": "node ./dist/index.js",
     "build": "tsc",
-    "dev": "nodemon 'src/server.ts' --exec 'ts-node' src/server.ts -e ts,graphql",
+    "dev": "nodemon 'src/index.ts' --exec 'ts-node' src/index.ts -e ts,graphql",
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
     "docker": "docker-compose up -d",
-    "test": "mocha 'src/**/*.test.ts' --require ts-node/register"
+    "test": "TEST=OK mocha 'src/**/*.test.ts' --require ts-node/register"
   },
   "dependencies": {
     "apollo-server": "2.24.0",
     "apollo-server-express": "2.24.0",
+    "dotenv": "9.0.0",
     "graphql": "15.5.0",
     "pg": "8.6.0",
     "reflect-metadata": "0.1.13",
