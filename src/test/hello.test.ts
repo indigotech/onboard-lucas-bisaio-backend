@@ -23,13 +23,6 @@ describe("Tests - GraphQL Server", () => {
     repository.delete({});
   });
 
-  const configAgent = async (query: string, variables?: any): Promise<Test> => {
-    return await agent.post("/graphql").set("Accept", "application/json").send({
-      query,
-      variables,
-    });
-  };
-
   it("should return a hello world", async () => {
     const query = "{ hello }";
     const queryResponse = await configAgent(query);
@@ -48,24 +41,23 @@ describe("Tests - GraphQL Server", () => {
   `;
 
   it("should create a new user", async () => {
+    const email = input.email;
     const response = await configAgent(mutation, { data: input });
 
     const newUser: UserResponse = response.body.data.createUser;
     expect(+newUser.id).to.be.greaterThan(0);
-  });
-
-  it("should search for the new user on database", async () => {
-    const email = input.email;
 
     const findOne = await repository.findOne({ email });
     expect(findOne?.email).to.be.eq(email);
-  });
 
-  it("should verify if the password was hashed", async () => {
     const hashedPassword = CryptoService.encode(input.password);
-    const email = input.email;
-
-    const findOne = await repository.findOne({ email });
     expect(findOne?.password).to.be.eq(hashedPassword);
   });
+
+  const configAgent = (query: string, variables?: any): Test => {
+    return agent.post("/graphql").set("Accept", "application/json").send({
+      query,
+      variables,
+    });
+  };
 });
