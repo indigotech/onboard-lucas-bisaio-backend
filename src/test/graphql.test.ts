@@ -71,6 +71,14 @@ describe("Tests - GraphQL Server", () => {
   });
 
   it("should return a error saying invalid email", async () => {
+    const user = new User();
+    user.email = input.email;
+    user.name = input.name;
+    user.password = CryptoService.encode(input.password);
+    user.birthDate = input.birthDate;
+
+    await repository.save(user);
+
     const response = await requestQuery(mutation, { data: input });
     expect(response.body.errors[0].message).to.be.eq(ErrorMessage.email);
     expect(response.body.errors[0].code).to.be.eq(422);
