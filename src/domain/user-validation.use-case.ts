@@ -1,6 +1,6 @@
 import { getRepository } from "typeorm";
 import { User } from "../entity";
-import { UserResponse } from "../schema/typedefs";
+import { UserResponse } from "../schema/schema.types";
 import { ValidatePasswordUseCase } from "./password-validation.use-case";
 import { AuthError, ErrorMessage } from "../core/error/error-messages";
 

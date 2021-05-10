@@ -1,5 +1,5 @@
 import { validateUser } from "../domain/user-validation.use-case";
-import { UserResponse } from "./typedefs";
+import { UserResponse } from "./schema.types";
 import { User } from "../entity";
 import { getRepository } from "typeorm";
 import { CryptoService } from "../core/security/crypto";
