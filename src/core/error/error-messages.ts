@@ -19,12 +19,8 @@ export class AuthError extends BaseError {
 }
 
 export class InternalError extends BaseError {
-  constructor(messege?: string, details?: string) {
-    super(
-      messege ?? "Erro do servidor. Tente novamente mais tarde.",
-      500,
-      details
-    );
+  constructor(message?: string, details?: string) {
+    super(message ?? "Erro do servidor. Tente novamente mais tarde.", 500, details);
   }
 }
 
@@ -46,7 +42,6 @@ export const formatError = (error: GraphQLError) => {
 };
 
 export const ErrorMessage = {
-  badlyformattedPassword:
-    "Senha inválida. Deve conter ao menos uma letra e uma número, e ao menos 7 caracters.",
+  badlyformattedPassword: "Senha inválida. Deve conter ao menos uma letra, um número e ao menos 7 caracteres.",
   email: "E-mail já cadastrado.",
 };
