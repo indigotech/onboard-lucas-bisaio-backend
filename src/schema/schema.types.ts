@@ -1,8 +1,7 @@
-export interface UserResponse {
+export interface UserType {
   id: number;
   name: string;
   email: string;
-  password: string;
   birthDate?: string;
 }
 
@@ -11,4 +10,14 @@ export interface UserInput {
   email: string;
   password: string;
   birthDate?: string;
+}
+
+export interface LoginInput {
+  email: string;
+  password: string;
+}
+
+export interface LoginType {
+  token: string;
+  user: UserType;
 }
