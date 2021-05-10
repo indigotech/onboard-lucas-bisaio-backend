@@ -13,20 +13,16 @@ abstract class BaseError extends Error {
 }
 
 export class AuthError extends BaseError {
-  constructor(message?: string, code?: number, details?: string) {
-    super(
-      message ?? "Credenciais inválidas. Tente novamente.",
-      code ?? 401,
-      details
-    );
+  constructor(message?: string, details?: string) {
+    super(message ?? "Credenciais inválidas. Tente novamente.", 401, details);
   }
 }
 
 export class InternalError extends BaseError {
-  constructor(messege?: string, code?: number, details?: string) {
+  constructor(messege?: string, details?: string) {
     super(
       messege ?? "Erro do servidor. Tente novamente mais tarde.",
-      code ?? 500,
+      500,
       details
     );
   }
@@ -50,7 +46,7 @@ export const formatError = (error: GraphQLError) => {
 };
 
 export const ErrorMessage = {
-  password:
+  badlyformattedPassword:
     "Senha inválida. Deve conter ao menos uma letra e uma número, e ao menos 7 caracters.",
   email: "E-mail já cadastrado.",
 };
