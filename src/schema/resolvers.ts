@@ -17,10 +17,11 @@ export const resolvers = {
       const user = new User();
       user.name = args.name;
       user.email = args.email;
-      user.password = CryptoService.encode(args.password);
+      user.password = args.password;
       user.birthDate = args.birthDate;
 
       await validateUser(user);
+      user.password = CryptoService.encode(args.password);
 
       const newUser = await getRepository(User).save(user);
       return newUser;

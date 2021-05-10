@@ -37,21 +37,22 @@ export const formatError = (error: GraphQLError) => {
     return {
       message: "Erro não identificado. Contate o desenvolvedor.",
       code: 500,
-      detail: error.message,
+      details: error.message,
     };
   }
   return {
     message: originalError.message,
     code: originalError.code,
-    detail: originalError.details,
+    details: originalError.details,
   };
 };
 
 export const ErrorMessage = {
-  badlyformattedPassword: "Senha inválida. Deve conter ao menos uma letra e uma número, e ao menos 7 caracters.",
+  badlyFormattedPassword: "Senha inválida. Deve conter ao menos uma letra e uma número, e ao menos 7 caracters.",
   email: "E-mail já cadastrado.",
   token: {
     invalid: "Token inválido.",
     expired: "Token expirado. Faça Login novamente.",
+    notSend: "Token não enviado.",
   },
 };

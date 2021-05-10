@@ -11,7 +11,7 @@ export async function validateUser(user: UserInput): Promise<void> {
   const validPassword = ValidatePasswordUseCase.exec(password);
 
   if (!validPassword) {
-    throw new AuthError(ErrorMessage.badlyformattedPassword);
+    throw new AuthError(ErrorMessage.badlyFormattedPassword);
   }
   const repository = getRepository(User);
 
@@ -21,10 +21,11 @@ export async function validateUser(user: UserInput): Promise<void> {
   }
 }
 
-export function verifyAuth(context: any) {
+export function verifyAuth(context: any): boolean {
   if (!context.token) {
-    throw new AuthError("Token não foi enviado.", "Token is undefined");
+    throw new AuthError(ErrorMessage.token.notSend, "Forbidden");
   }
 
-  JWTService.verify(context.token);
+  const isValid = JWTService.verify(context.token);
+  return !!isValid;
 }
