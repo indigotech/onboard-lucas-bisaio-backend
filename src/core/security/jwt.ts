@@ -1,8 +1,15 @@
 import * as jwt from "jsonwebtoken";
+import { AuthError, ErrorMessage } from "../error";
 
 interface SignData {
   id: number;
   rememberMe?: boolean;
+}
+
+interface DecodedData {
+  data: { email: string; name: string; rememberMe?: boolean };
+  iat: Date;
+  exp: Date;
 }
 
 function sign(value: SignData): string {
@@ -14,9 +21,20 @@ function sign(value: SignData): string {
   return `Bearer ${token}`;
 }
 
-// TODO: verify token - Future Feature
-function verify(token: string) {
-  return jwt.verify(token, process.env.TOKEN_SECRET!);
+function verify(token: string): boolean {
+  const Bearer = "Bearer ";
+  if (token.indexOf(Bearer) === -1) {
+    throw new AuthError(ErrorMessage.token.invalid);
+  }
+
+  const jwtoken = token.replace(Bearer, "");
+  const decoded = jwt.verify(jwtoken, process.env.TOKEN_SECRET!) as DecodedData;
+
+  if (new Date(decoded.exp).getSeconds() - new Date().getSeconds() > 0) {
+    throw new AuthError(ErrorMessage.token.expired);
+  }
+
+  return true;
 }
 
 export const JWTService = {

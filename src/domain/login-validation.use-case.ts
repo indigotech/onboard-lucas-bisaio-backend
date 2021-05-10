@@ -21,6 +21,9 @@ export async function validateLogin(arg: LoginInput): Promise<LoginType> {
   const name = user.name;
   const token = JWTService.sign({ id: user.id, rememberMe });
 
+  const isValid = JWTService.verify(token);
+  console.log(isValid);
+
   return {
     token,
     user,

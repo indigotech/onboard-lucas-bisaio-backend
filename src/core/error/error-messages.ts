@@ -50,4 +50,8 @@ export const formatError = (error: GraphQLError) => {
 export const ErrorMessage = {
   badlyformattedPassword: "Senha inválida. Deve conter ao menos uma letra e uma número, e ao menos 7 caracters.",
   email: "E-mail já cadastrado.",
+  token: {
+    invalid: "Token inválido.",
+    expired: "Token expirado. Faça Login novamente.",
+  },
 };
