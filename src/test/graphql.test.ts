@@ -67,7 +67,7 @@ describe("Tests - GraphQL Server", () => {
 
     const response = await requestQuery(mutation, { data: user });
     expect(response.body.errors[0].message).to.be.eq(ErrorMessage.badlyformattedPassword);
-    expect(response.body.errors[0].code).to.be.eq(422);
+    expect(response.body.errors[0].code).to.be.eq(401);
   });
 
   it("should return a error saying invalid email", async () => {
@@ -81,7 +81,7 @@ describe("Tests - GraphQL Server", () => {
 
     const response = await requestQuery(mutation, { data: input });
     expect(response.body.errors[0].message).to.be.eq(ErrorMessage.email);
-    expect(response.body.errors[0].code).to.be.eq(422);
+    expect(response.body.errors[0].code).to.be.eq(401);
   });
 
   const requestQuery = (query: string, variables?: any): Test => {
