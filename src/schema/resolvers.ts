@@ -27,9 +27,7 @@ export const resolvers = {
     },
 
     login: async (_: any, { data: args }: { data: LoginInput }) => {
-      const { token, user } = await validateLogin(args);
-
-      return { token, user };
+      return await validateLogin(args);
     },
   },
 };
