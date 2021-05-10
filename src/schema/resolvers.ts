@@ -1,5 +1,5 @@
 import { validateUser } from "../domain/user-validation.use-case";
-import { LoginInput, UserInput } from "./schema.types";
+import { LoginInput, LoginType, UserInput, UserType } from "./schema.types";
 import { User } from "../entity";
 import { getRepository } from "typeorm";
 import { CryptoService } from "../core/security/crypto";
@@ -10,7 +10,7 @@ export const resolvers = {
   },
 
   Mutation: {
-    createUser: async (_: any, { user: args }: { user: UserInput }) => {
+    createUser: async (_: any, { user: args }: { user: UserInput }): Promise<UserType> => {
       const user = new User();
       user.name = args.name;
       user.email = args.email;
@@ -25,7 +25,7 @@ export const resolvers = {
       return newUser;
     },
 
-    login: async (_: any, { data: args }: { data: LoginInput }) => {
+    login: async (_: any, { data: args }: { data: LoginInput }): Promise<LoginType> => {
       const user = {
         id: 12,
         name: "User Name",
