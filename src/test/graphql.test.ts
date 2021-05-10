@@ -66,7 +66,7 @@ describe("Tests - GraphQL Server", () => {
     };
 
     const response = await requestQuery(mutation, { data: user });
-    expect(response.body.errors[0].message).to.be.eq(ErrorMessage.password);
+    expect(response.body.errors[0].message).to.be.eq(ErrorMessage.badlyformattedPassword);
     expect(response.body.errors[0].code).to.be.eq(422);
   });
 
