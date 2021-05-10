@@ -1,15 +1,15 @@
 import * as jwt from "jsonwebtoken";
 
 interface SignData {
-  name: string;
-  email: string;
+  id: number;
   rememberMe?: boolean;
 }
 
-function sign(data: SignData): string {
-  const expiresIn = data.rememberMe ? "7d" : +process.env.TOKEN_TIMEOUT!;
+function sign(value: SignData): string {
+  const { rememberMe, id } = value;
+  const expiresIn = rememberMe ? "7d" : +process.env.TOKEN_TIMEOUT!;
 
-  const token = jwt.sign({ data }, process.env.TOKEN_SECRET!, { expiresIn });
+  const token = jwt.sign({ data: id }, process.env.TOKEN_SECRET!, { expiresIn });
 
   return `Bearer ${token}`;
 }

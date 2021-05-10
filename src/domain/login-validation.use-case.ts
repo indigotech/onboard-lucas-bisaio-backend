@@ -19,7 +19,7 @@ export async function validateLogin(arg: LoginInput): Promise<LoginType> {
   }
 
   const name = user.name;
-  const token = JWTService.sign({ email, name, rememberMe });
+  const token = JWTService.sign({ id: user.id, rememberMe });
 
   return {
     token,
