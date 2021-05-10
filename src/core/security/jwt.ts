@@ -28,12 +28,10 @@ function verify(token: string): boolean {
   }
 
   const jwtoken = token.replace(Bearer, "");
-  const decoded = jwt.verify(jwtoken, process.env.TOKEN_SECRET!) as DecodedData;
-
-  const isValid = new Date(+decoded.exp * 1000) > new Date();
-
-  if (!isValid) {
-    throw new AuthError(ErrorMessage.token.expired);
+  try {
+    jwt.verify(jwtoken, process.env.TOKEN_SECRET!) as DecodedData;
+  } catch ({ message }) {
+    throw new AuthError(ErrorMessage.token.expired, message);
   }
 
   return true;
