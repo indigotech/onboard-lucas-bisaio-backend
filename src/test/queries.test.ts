@@ -25,8 +25,8 @@ describe("Tests - GraphQL Server", () => {
 
   it("should return a hello world", async () => {
     const query = "{ hello }";
-    const queryResponse = await configAgent(query);
-    expect(queryResponse.body.data.hello).to.be.eq("Hello World!");
+    const response = await requestQuery(query);
+    expect(response.body.data.hello).to.be.eq("Hello World!");
   });
 
   const mutation = `
@@ -42,7 +42,7 @@ describe("Tests - GraphQL Server", () => {
 
   it("should create a new user", async () => {
     const email = input.email;
-    const response = await configAgent(mutation, { data: input });
+    const response = await requestQuery(mutation, { data: input });
 
     const newUser: UserResponse = response.body.data.createUser;
     expect(+newUser.id).to.be.greaterThan(0);
@@ -54,7 +54,7 @@ describe("Tests - GraphQL Server", () => {
     expect(findOne?.password).to.be.eq(hashedPassword);
   });
 
-  const configAgent = (query: string, variables?: any): Test => {
+  const requestQuery = (query: string, variables?: any): Test => {
     return agent.post("/graphql").set("Accept", "application/json").send({
       query,
       variables,
