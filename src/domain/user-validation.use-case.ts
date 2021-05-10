@@ -10,7 +10,7 @@ export async function validateUser(user: UserResponse): Promise<void> {
   const validPassword = ValidatePasswordUseCase.exec(password);
 
   if (!validPassword) {
-    throw new AuthError(ErrorMessage.password);
+    throw new AuthError(ErrorMessage.badlyformattedPassword);
   }
   const repository = getRepository(User);
 
