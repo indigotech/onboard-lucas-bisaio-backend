@@ -7,7 +7,7 @@ interface SignData {
 }
 
 interface DecodedData {
-  data: { email: string; name: string; rememberMe?: boolean };
+  data: SignData;
   iat: Date;
   exp: Date;
 }
@@ -30,7 +30,9 @@ function verify(token: string): boolean {
   const jwtoken = token.replace(Bearer, "");
   const decoded = jwt.verify(jwtoken, process.env.TOKEN_SECRET!) as DecodedData;
 
-  if (new Date(decoded.exp).getSeconds() - new Date().getSeconds() > 0) {
+  const isValid = new Date(+decoded.exp * 1000) > new Date();
+
+  if (!isValid) {
     throw new AuthError(ErrorMessage.token.expired);
   }
 
