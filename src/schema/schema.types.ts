@@ -6,6 +6,10 @@ export interface UserType {
 }
 
 export interface UserInput {
+  id: number;
+}
+
+export interface CreateUserInput {
   name: string;
   email: string;
   password: string;

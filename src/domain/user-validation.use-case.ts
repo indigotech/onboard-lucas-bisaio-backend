@@ -1,11 +1,11 @@
 import { getRepository } from "typeorm";
 import { User } from "../entity";
-import { UserInput } from "../schema";
+import { CreateUserInput } from "../schema";
 import { ValidatePasswordUseCase } from "./password-validation.use-case";
 import { AuthError, ErrorMessage } from "../core/error/error-messages";
 import { JWTService } from "../core/security/jwt";
 
-export async function validateUser(user: UserInput): Promise<void> {
+export async function validateUser(user: CreateUserInput): Promise<void> {
   const { password, email } = user;
 
   const validPassword = ValidatePasswordUseCase.exec(password);
