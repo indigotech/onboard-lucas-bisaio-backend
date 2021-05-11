@@ -1,14 +1,15 @@
-import request, { SuperTest, Test } from "supertest";
 import { expect } from "chai";
-import { setup } from "../server";
+import request, { SuperTest, Test } from "supertest";
 import { getRepository, Repository } from "typeorm";
-import { User } from "../entity";
-import { LoginInput, LoginType, UserInput, UserType } from "../schema/schema.types";
-import { CryptoService } from "../core/security/crypto";
-import { JWTService } from "../core/security/jwt";
-import { ErrorMessage } from "../core/error";
 
-describe("Tests - GraphQL Server", () => {
+import { setup } from "../server";
+import { User } from "../entity";
+import { JWTService } from "../core/security/jwt";
+import { CryptoService } from "../core/security/crypto";
+import { ErrorMessage } from "../core/error";
+import { UserInput, UserType } from "../schema/schema.types";
+
+describe("Test for CreateUser", () => {
   let agent: SuperTest<Test>;
   let repository: Repository<User>;
   const input: UserInput = {
@@ -28,12 +29,6 @@ describe("Tests - GraphQL Server", () => {
     repository.delete({});
   });
 
-  it("should return a hello world", async () => {
-    const query = "{ hello }";
-    const response = await requestQuery(query);
-    expect(response.body.data.hello).to.be.eq("Hello World!");
-  });
-
   const createUser = `
     mutation CreateUser($data: UserInput!) {
       createUser(user: $data) {
@@ -45,41 +40,12 @@ describe("Tests - GraphQL Server", () => {
     }
   `;
 
-  const login = `
-    mutation Login($data: LoginInput!) {
-      login(data: $data) {
-        token
-        user {
-          id
-          email
-          name
-          birthDate
-        }
-      }
-    }
-  `;
-
   it("should throw an error saying not logged in", async () => {
-    const response = await requestQuery(createUser, { data: input });
+    const token = "";
+    const response = await requestQuery(createUser, { data: input }, token);
     expect(response.body.errors[0].message).to.be.eq(ErrorMessage.token.invalid);
     expect(response.body.errors[0].code).to.be.eq(401);
     expect(response.body.errors[0].details).to.be.eq("Token not found");
-  });
-
-  it("should login successfully", async () => {
-    await createUserEntity(input);
-
-    const data = {
-      email: input.email,
-      password: input.password,
-    };
-
-    const response = await requestQuery(login, { data });
-    expect(response.body.data.login.token.indexOf("Bearer ")).to.be.greaterThan(-1);
-    expect(response.body.data.login.user.email).to.be.eq(input.email);
-    expect(response.body.data.login.user.name).to.be.eq(input.name);
-    expect(response.body.data.login.user.birthDate).to.be.eq(input.birthDate);
-    expect(+response.body.data.login.user.id).to.be.greaterThan(0);
   });
 
   it("should create a new user", async () => {
@@ -138,14 +104,10 @@ describe("Tests - GraphQL Server", () => {
     await repository.save(user);
   };
 
-  const requestQuery = (query: string, variables?: any, token?: string): Test => {
-    return agent
-      .post("/graphql")
-      .set("authorization", token ?? "")
-      .set("Accept", "application/json")
-      .send({
-        query,
-        variables,
-      });
+  const requestQuery = (query: string, variables: any, token: string): Test => {
+    return agent.post("/graphql").set("authorization", token).set("Accept", "application/json").send({
+      query,
+      variables,
+    });
   };
 });
