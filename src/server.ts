@@ -32,7 +32,5 @@ export const setup = async () => {
 
   const PORT = +(process.env.SERVER_PORT ?? 4000);
 
-  httpServer.listen({ port: PORT }, (): void =>
-    console.log(`Listenning at http://localhost:${PORT}/graphql`)
-  );
+  httpServer.listen({ port: PORT }, (): void => console.log(`Listening at http://localhost:${PORT}/graphql`));
 };
