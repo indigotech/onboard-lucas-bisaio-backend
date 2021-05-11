@@ -22,7 +22,7 @@ export const resolvers = {
   },
 
   Mutation: {
-    createUser: async (_: any, { user: args }: { user: CreateUserInput }, context: any): Promise<UserType> => {
+    createUser: async (_: any, { data: args }: { data: CreateUserInput }, context: any): Promise<UserType> => {
       verifyAuthOrFail(context);
 
       const user = new User();
