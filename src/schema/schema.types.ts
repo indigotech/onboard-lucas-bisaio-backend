@@ -9,6 +9,10 @@ export interface UserInput {
   id: number;
 }
 
+export interface UsersInput {
+  max?: number;
+}
+
 export interface CreateUserInput {
   name: string;
   email: string;
