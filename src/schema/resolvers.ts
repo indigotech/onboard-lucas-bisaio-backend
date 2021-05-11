@@ -1,7 +1,7 @@
 import { getRepository } from "typeorm";
 import { CryptoService } from "../core/security/crypto";
 import { validateLogin } from "../domain/login-validation.use-case";
-import { validateUser, verifyAuth } from "../domain/user-validation.use-case";
+import { validateUser, verifyAuthOrFail } from "../domain/user-validation.use-case";
 import { LoginInput, LoginType, UserInput, UserType } from "./schema.types";
 import { User } from "../entity";
 
@@ -12,7 +12,7 @@ export const resolvers = {
 
   Mutation: {
     createUser: async (_: any, { user: args }: { user: UserInput }, context: any): Promise<UserType> => {
-      verifyAuth(context); //throws an error if token is not valid
+      verifyAuthOrFail(context); //throws an error if token is not valid
 
       const user = new User();
       user.name = args.name;
@@ -27,7 +27,7 @@ export const resolvers = {
       return newUser;
     },
 
-    login: async (_: any, { data: args }: { data: LoginInput }) => {
+    login: async (_: any, { data: args }: { data: LoginInput }): Promise<LoginType> => {
       return await validateLogin(args);
     },
   },

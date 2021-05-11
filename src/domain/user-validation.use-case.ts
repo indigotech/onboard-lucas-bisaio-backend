@@ -21,9 +21,9 @@ export async function validateUser(user: UserInput): Promise<void> {
   }
 }
 
-export function verifyAuth(context: any): boolean {
+export function verifyAuthOrFail(context: any): boolean {
   if (!context.token) {
-    throw new AuthError(ErrorMessage.token.notSend, "Forbidden");
+    throw new AuthError(ErrorMessage.token.invalid, "Token not found");
   }
 
   const isValid = JWTService.verify(context.token);

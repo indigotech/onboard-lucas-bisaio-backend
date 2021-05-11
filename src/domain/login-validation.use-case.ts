@@ -18,7 +18,6 @@ export async function validateLogin(arg: LoginInput): Promise<LoginType> {
     throw new AuthError();
   }
 
-  const name = user.name;
   const token = JWTService.sign({ id: user.id, rememberMe });
 
   return {

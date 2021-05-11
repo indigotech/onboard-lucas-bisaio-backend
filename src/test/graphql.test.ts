@@ -5,6 +5,7 @@ import { getRepository, Repository } from "typeorm";
 import { User } from "../entity";
 import { LoginInput, LoginType, UserInput, UserType } from "../schema/schema.types";
 import { CryptoService } from "../core/security/crypto";
+import { JWTService } from "../core/security/jwt";
 import { ErrorMessage } from "../core/error";
 
 describe("Tests - GraphQL Server", () => {
@@ -49,7 +50,10 @@ describe("Tests - GraphQL Server", () => {
       login(data: $data) {
         token
         user {
+          id
           email
+          name
+          birthDate
         }
       }
     }
@@ -57,9 +61,9 @@ describe("Tests - GraphQL Server", () => {
 
   it("should throw an error saying not logged in", async () => {
     const response = await requestQuery(createUser, { data: input });
-    expect(response.body.errors[0].message).to.be.eq(ErrorMessage.token.notSend);
+    expect(response.body.errors[0].message).to.be.eq(ErrorMessage.token.invalid);
     expect(response.body.errors[0].code).to.be.eq(401);
-    expect(response.body.errors[0].details).to.be.eq("Forbidden");
+    expect(response.body.errors[0].details).to.be.eq("Token not found");
   });
 
   it("should login successfully", async () => {
@@ -73,17 +77,13 @@ describe("Tests - GraphQL Server", () => {
     const response = await requestQuery(login, { data });
     expect(response.body.data.login.token.indexOf("Bearer ")).to.be.greaterThan(-1);
     expect(response.body.data.login.user.email).to.be.eq(input.email);
+    expect(response.body.data.login.user.name).to.be.eq(input.name);
+    expect(response.body.data.login.user.birthDate).to.be.eq(input.birthDate);
+    expect(+response.body.data.login.user.id).to.be.greaterThan(0);
   });
 
   it("should create a new user", async () => {
-    await createUserEntity(input);
-
-    const loginInput = {
-      email: input.email,
-      password: input.password,
-    };
-
-    const { token, user: _ } = await makeLogin(loginInput);
+    const token = JWTService.sign({ id: 1 });
 
     input.email = "email_test@taqtile.com";
     const response = await requestQuery(createUser, { data: input }, token);
@@ -100,21 +100,13 @@ describe("Tests - GraphQL Server", () => {
   });
 
   it("should return a error saying invalid password", async () => {
-    await createUserEntity(input);
-
-    const loginInput = {
-      email: input.email,
-      password: input.password,
-    };
-
-    const { token, user: _ } = await makeLogin(loginInput);
-
     const data: UserInput = {
       name: "taqtile",
       email: "taqtiler@taqtile.com.br",
       password: "invalid-password",
     };
 
+    const token = JWTService.sign({ id: 1 });
     const response = await requestQuery(createUser, { data }, token);
 
     expect(response.body.errors[0].message).to.be.eq(ErrorMessage.badlyFormattedPassword);
@@ -122,14 +114,7 @@ describe("Tests - GraphQL Server", () => {
   });
 
   it("should return a error saying invalid email", async () => {
-    await createUserEntity(input);
-
-    const loginInput = {
-      email: input.email,
-      password: input.password,
-    };
-
-    const { token, user: _ } = await makeLogin(loginInput);
+    const token = JWTService.sign({ id: 1 });
 
     const newUser: UserInput = {
       name: "new user",
@@ -151,13 +136,6 @@ describe("Tests - GraphQL Server", () => {
     user.birthDate = data.birthDate;
 
     await repository.save(user);
-  };
-
-  const makeLogin = async (data: LoginInput): Promise<LoginType> => {
-    const response = await requestQuery(login, { data });
-
-    const { token, user } = response.body.data.login as LoginType;
-    return { token, user };
   };
 
   const requestQuery = (query: string, variables?: any, token?: string): Test => {
