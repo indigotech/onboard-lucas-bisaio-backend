@@ -2,7 +2,7 @@ import { getRepository } from "typeorm";
 import { setup } from "./server";
 import { User } from "./entity";
 
-export async function populateDatabase() {
+async function populateDatabase() {
   await setup();
   for (let i = 1; i <= 50; i++) {
     const fakeUser = new User();
