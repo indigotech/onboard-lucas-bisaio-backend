@@ -7,7 +7,7 @@ interface SignData {
 }
 
 interface DecodedData {
-  data: SignData;
+  data: number;
   iat: Date;
   exp: Date;
 }
@@ -37,7 +37,13 @@ function verify(token: string): boolean {
   return true;
 }
 
+function decode(token: string): DecodedData {
+  token = token.replace("Bearer ", "");
+  return jwt.decode(token) as DecodedData;
+}
+
 export const JWTService = {
   sign,
   verify,
+  decode,
 };
