@@ -5,7 +5,7 @@ export interface UserType {
   birthDate?: string;
 }
 
-export interface UserInput {
+export interface CreateUserInput {
   name: string;
   email: string;
   password: string;

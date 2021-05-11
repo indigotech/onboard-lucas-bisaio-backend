@@ -1,7 +1,7 @@
 import { gql } from "apollo-server";
 
 export const typeDefs = gql`
-  input UserInput {
+  input CreateUserInput {
     name: String!
     email: String!
     password: String!

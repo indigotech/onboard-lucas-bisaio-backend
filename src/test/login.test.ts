@@ -4,13 +4,13 @@ import { Repository, getRepository } from "typeorm";
 
 import { User } from "../entity";
 import { JWTService } from "../core/security/jwt";
-import { UserInput } from "../schema/schema.types";
+import { CreateUserInput } from "../schema/schema.types";
 import { createUserEntity, requestQuery } from "./common";
 
 describe("Test for Login", () => {
   let agent: SuperTest<Test>;
   let repository: Repository<User>;
-  const input: UserInput = {
+  const input: CreateUserInput = {
     name: "admin",
     email: "admin@taqtile.com.br",
     password: "1234qwer",

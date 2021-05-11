@@ -7,13 +7,13 @@ import { User } from "../entity";
 import { JWTService } from "../core/security/jwt";
 import { CryptoService } from "../core/security/crypto";
 import { ErrorMessage } from "../core/error";
-import { UserInput, UserType } from "../schema/schema.types";
+import { CreateUserInput, UserType } from "../schema/schema.types";
 import { createUserEntity, requestQuery } from "./common";
 
 describe("Test for CreateUser", () => {
   let agent: SuperTest<Test>;
   let repository: Repository<User>;
-  const input: UserInput = {
+  const input: CreateUserInput = {
     name: "admin",
     email: "admin@taqtile.com.br",
     password: "1234qwer",
@@ -73,7 +73,7 @@ describe("Test for CreateUser", () => {
   });
 
   it("should return a error saying invalid password", async () => {
-    const data: UserInput = {
+    const data: CreateUserInput = {
       name: "taqtile",
       email: "taqtiler@taqtile.com.br",
       password: "invalid-password",
@@ -89,7 +89,7 @@ describe("Test for CreateUser", () => {
   it("should return a error saying invalid email", async () => {
     const token = JWTService.sign({ id: 1 });
 
-    const newUser: UserInput = {
+    const newUser: CreateUserInput = {
       name: "new user",
       email: "user@taqtile.com.br",
       password: "1234qwer",
