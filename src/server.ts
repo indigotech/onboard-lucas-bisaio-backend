@@ -24,6 +24,9 @@ export const setup = async () => {
     resolvers,
     typeDefs,
     formatError,
+    context: ({ req }) => ({
+      token: req.headers.authorization,
+    }),
   });
 
   server.applyMiddleware({ app, path: "/graphql" });

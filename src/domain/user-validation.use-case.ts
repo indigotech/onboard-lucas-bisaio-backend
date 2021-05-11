@@ -3,6 +3,7 @@ import { User } from "../entity";
 import { UserInput } from "../schema";
 import { ValidatePasswordUseCase } from "./password-validation.use-case";
 import { AuthError, ErrorMessage } from "../core/error/error-messages";
+import { JWTService } from "../core/security/jwt";
 
 export async function validateUser(user: UserInput): Promise<void> {
   const { password, email } = user;
@@ -10,7 +11,7 @@ export async function validateUser(user: UserInput): Promise<void> {
   const validPassword = ValidatePasswordUseCase.exec(password);
 
   if (!validPassword) {
-    throw new AuthError(ErrorMessage.badlyformattedPassword);
+    throw new AuthError(ErrorMessage.badlyFormattedPassword);
   }
   const repository = getRepository(User);
 
@@ -18,4 +19,13 @@ export async function validateUser(user: UserInput): Promise<void> {
   if (hasAnotherUser) {
     throw new AuthError(ErrorMessage.email);
   }
+}
+
+export function verifyAuthOrFail(context: any): boolean {
+  if (!context.token) {
+    throw new AuthError(ErrorMessage.token.invalid, "Token not found");
+  }
+
+  const isValid = JWTService.verify(context.token);
+  return !!isValid;
 }
