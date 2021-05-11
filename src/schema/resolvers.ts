@@ -24,8 +24,8 @@ export const resolvers = {
 
       return await getRepository(User)
         .createQueryBuilder("name")
-        .orderBy({ "user.name": "ASC" })
-        .take(args.max ?? 10)
+        .orderBy({ name: "ASC" })
+        .take(args?.max ?? 10)
         .getMany();
     },
   },

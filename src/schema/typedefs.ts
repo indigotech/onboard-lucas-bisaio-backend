@@ -19,7 +19,7 @@ export const typeDefs = gql`
   }
 
   input UsersInput {
-    max: Number
+    max: ID
   }
 
   type UserType {
