@@ -9,7 +9,8 @@
     "dev": "nodemon 'src/index.ts' --exec 'ts-node' src/index.ts -e ts,graphql",
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
     "docker": "docker-compose up -d",
-    "test": "TEST=OK mocha 'src/**/*.test.ts' --require ts-node/register"
+    "test": "TEST=OK mocha 'src/**/*.test.ts' --require ts-node/register",
+    "seed": "ts-node src/seed.ts"
   },
   "dependencies": {
     "apollo-server": "2.24.0",
