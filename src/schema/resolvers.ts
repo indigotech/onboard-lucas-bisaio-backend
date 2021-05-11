@@ -12,7 +12,7 @@ export const resolvers = {
 
   Mutation: {
     createUser: async (_: any, { user: args }: { user: UserInput }, context: any): Promise<UserType> => {
-      verifyAuthOrFail(context); //throws an error if token is not valid
+      verifyAuthOrFail(context);
 
       const user = new User();
       user.name = args.name;
