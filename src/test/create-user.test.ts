@@ -58,9 +58,15 @@ describe("Test for CreateUser", () => {
     const email = input.email;
     const newUser: UserType = response.body.data.createUser;
     expect(+newUser.id).to.be.greaterThan(0);
+    expect(newUser.email).to.be.eq(input.email);
+    expect(newUser.name).to.be.eq(input.name);
+    expect(newUser.birthDate).to.be.eq(input.birthDate);
 
     const findOne = await repository.findOne({ email });
     expect(findOne?.email).to.be.eq(email);
+    expect(findOne?.id).to.be.greaterThan(0);
+    expect(findOne?.name).to.be.eq(input.name);
+    expect(findOne?.birthDate).to.be.eq(input.birthDate);
 
     const hashedPassword = CryptoService.encode(input.password);
     expect(findOne?.password).to.be.eq(hashedPassword);
