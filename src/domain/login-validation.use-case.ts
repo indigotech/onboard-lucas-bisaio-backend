@@ -6,7 +6,7 @@ import { CryptoService } from "../core/security/crypto";
 import { JWTService } from "../core/security/jwt";
 
 export async function validateLogin(arg: LoginInput): Promise<LoginType> {
-  const { password, email } = arg;
+  const { password, email, rememberMe } = arg;
 
   const user = await getRepository(User).findOne({ email });
 
@@ -18,7 +18,8 @@ export async function validateLogin(arg: LoginInput): Promise<LoginType> {
     throw new AuthError();
   }
 
-  const token = JWTService.sign(user);
+  const name = user.name;
+  const token = JWTService.sign({ id: user.id, rememberMe });
 
   return {
     token,
