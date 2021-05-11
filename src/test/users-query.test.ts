@@ -75,4 +75,19 @@ describe("Tests of Users", async () => {
     expect(data.hasPreviousPage).to.be.true;
     expect(+data.count).to.be.eq(50);
   });
+
+  it("should return that dont have next page", async () => {
+    const token = JWTService.sign({ id: 1 });
+    const params = {
+      skip: 35,
+      take: 10,
+    };
+
+    const response = await requestQuery(agent, queryUsers, { data: params }, token);
+    const data = response.body.data.users;
+    expect(data.users.length).to.be.eq(10);
+    expect(data.hasNextPage).to.be.false;
+    expect(data.hasPreviousPage).to.be.true;
+    expect(+data.count).to.be.eq(50);
+  });
 });
