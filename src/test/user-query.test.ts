@@ -51,7 +51,7 @@ describe("Tests for User", () => {
     expect(+response.body.data.user.id).to.be.eq(id);
   });
 
-  it("should return an error invalid id", async () => {
+  it("should return an error - invalid id", async () => {
     const id = -1;
     const token = JWTService.sign({ id });
 
@@ -61,7 +61,7 @@ describe("Tests for User", () => {
     expect(response.body.errors[0].details).to.be.eq("User not found");
   });
 
-  it("should return an erro invalid token", async () => {
+  it("should return an error - invalid token", async () => {
     await createUserEntity(user);
     const savedUser = await getRepository(User).findOne({ email: user.email });
     const id = savedUser?.id!;

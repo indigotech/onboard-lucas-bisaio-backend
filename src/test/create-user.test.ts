@@ -72,7 +72,7 @@ describe("Test for CreateUser", () => {
     expect(findOne?.password).to.be.eq(hashedPassword);
   });
 
-  it("should return a error saying invalid password", async () => {
+  it("should return an error saying invalid password", async () => {
     const data: CreateUserInput = {
       name: "taqtile",
       email: "taqtiler@taqtile.com.br",
@@ -86,7 +86,7 @@ describe("Test for CreateUser", () => {
     expect(response.body.errors[0].code).to.be.eq(401);
   });
 
-  it("should return a error saying invalid email", async () => {
+  it("should return an error saying invalid email", async () => {
     const token = JWTService.sign({ id: 1 });
 
     const newUser: CreateUserInput = {

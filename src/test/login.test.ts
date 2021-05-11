@@ -7,7 +7,7 @@ import { JWTService } from "../core/security/jwt";
 import { CreateUserInput } from "../schema/schema.types";
 import { createUserEntity, requestQuery } from "./common";
 
-describe("Test for Login", () => {
+describe("Tests for Login", () => {
   let agent: SuperTest<Test>;
   let repository: Repository<User>;
   const input: CreateUserInput = {
@@ -85,7 +85,7 @@ describe("Test for Login", () => {
     expect(response.body.errors[0].details).to.be.eq("User not found");
   });
 
-  it("should say invalid password", async () => {
+  it("should return an error - invalid password", async () => {
     await createUserEntity(input);
 
     const data = {
