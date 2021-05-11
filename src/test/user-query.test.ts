@@ -3,6 +3,7 @@ import request, { SuperTest, Test } from "supertest";
 import { getRepository, Repository } from "typeorm";
 
 import { User } from "../entity";
+import { ErrorMessage } from "../core/error";
 import { JWTService } from "../core/security/jwt";
 import { CreateUserInput } from "../schema/schema.types";
 import { createUserEntity, requestQuery } from "./common";
@@ -58,5 +59,17 @@ describe("Tests for User", () => {
     expect(response.body.errors[0].message).to.be.eq("Usuário não encontrado");
     expect(response.body.errors[0].code).to.be.eq(404);
     expect(response.body.errors[0].details).to.be.eq("User not found");
+  });
+
+  it("should return an erro invalid token", async () => {
+    await createUserEntity(user);
+    const savedUser = await getRepository(User).findOne({ email: user.email });
+    const id = savedUser?.id!;
+    const invalidToken = "invalid-token";
+
+    const response = await requestQuery(agent, userQuery, { data: { id } }, invalidToken);
+    expect(response.body.errors[0].message).to.be.eq(ErrorMessage.token.invalid);
+    expect(response.body.errors[0].code).to.be.eq(401);
+    expect(response.body.errors[0].details).to.be.eq("Unauthorized");
   });
 });
