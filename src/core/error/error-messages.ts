@@ -24,9 +24,9 @@ export class NotFoundError extends BaseError {
   }
 }
 
-export class InternalError extends BaseError {
+export class InputError extends BaseError {
   constructor(messege?: string, details?: string) {
-    super(messege ?? "Erro do servidor. Tente novamente mais tarde.", 500, details);
+    super(messege ?? "Argumento inválido", 400, details);
   }
 }
 
