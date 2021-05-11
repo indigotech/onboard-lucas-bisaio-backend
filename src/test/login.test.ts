@@ -4,7 +4,7 @@ import { Repository, getRepository } from "typeorm";
 
 import { User } from "../entity";
 import { UserInput } from "../schema/schema.types";
-import { CryptoService } from "../core/security/crypto";
+import { createUserEntity, requestQuery } from "./common";
 
 describe("Test for Login", () => {
   let agent: SuperTest<Test>;
@@ -17,7 +17,7 @@ describe("Test for Login", () => {
   };
 
   before(() => {
-    agent = request(`${process.env.BASE_URL}${process.env.SERVER_PORT}`);
+    agent = request(`${process.env.BASE_URL}`);
     repository = getRepository(User);
   });
 
@@ -47,28 +47,11 @@ describe("Test for Login", () => {
       password: input.password,
     };
 
-    const response = await requestQuery(login, { data });
+    const response = await requestQuery(agent, login, { data });
     expect(response.body.data.login.token.indexOf("Bearer ")).to.be.greaterThan(-1);
     expect(response.body.data.login.user.email).to.be.eq(input.email);
     expect(response.body.data.login.user.name).to.be.eq(input.name);
     expect(response.body.data.login.user.birthDate).to.be.eq(input.birthDate);
     expect(+response.body.data.login.user.id).to.be.greaterThan(0);
   });
-
-  const createUserEntity = async (data: UserInput): Promise<void> => {
-    const user = new User();
-    user.email = data.email;
-    user.name = data.name;
-    user.password = CryptoService.encode(data.password);
-    user.birthDate = data.birthDate;
-
-    await repository.save(user);
-  };
-
-  const requestQuery = (query: string, variables?: any): Test => {
-    return agent.post("/graphql").set("Accept", "application/json").send({
-      query,
-      variables,
-    });
-  };
 });

@@ -8,6 +8,7 @@ import { JWTService } from "../core/security/jwt";
 import { CryptoService } from "../core/security/crypto";
 import { ErrorMessage } from "../core/error";
 import { UserInput, UserType } from "../schema/schema.types";
+import { createUserEntity, requestQuery } from "./common";
 
 describe("Test for CreateUser", () => {
   let agent: SuperTest<Test>;
@@ -21,7 +22,7 @@ describe("Test for CreateUser", () => {
 
   before(async () => {
     await setup();
-    agent = request(`${process.env.BASE_URL}${process.env.SERVER_PORT}`);
+    agent = request(`${process.env.BASE_URL}`);
     repository = getRepository(User);
   });
 
@@ -42,7 +43,7 @@ describe("Test for CreateUser", () => {
 
   it("should throw an error saying not logged in", async () => {
     const token = "";
-    const response = await requestQuery(createUser, { data: input }, token);
+    const response = await requestQuery(agent, createUser, { data: input }, token);
     expect(response.body.errors[0].message).to.be.eq(ErrorMessage.token.invalid);
     expect(response.body.errors[0].code).to.be.eq(401);
     expect(response.body.errors[0].details).to.be.eq("Token not found");
@@ -52,7 +53,7 @@ describe("Test for CreateUser", () => {
     const token = JWTService.sign({ id: 1 });
 
     input.email = "email_test@taqtile.com";
-    const response = await requestQuery(createUser, { data: input }, token);
+    const response = await requestQuery(agent, createUser, { data: input }, token);
 
     const email = input.email;
     const newUser: UserType = response.body.data.createUser;
@@ -73,7 +74,7 @@ describe("Test for CreateUser", () => {
     };
 
     const token = JWTService.sign({ id: 1 });
-    const response = await requestQuery(createUser, { data }, token);
+    const response = await requestQuery(agent, createUser, { data }, token);
 
     expect(response.body.errors[0].message).to.be.eq(ErrorMessage.badlyFormattedPassword);
     expect(response.body.errors[0].code).to.be.eq(401);
@@ -89,25 +90,8 @@ describe("Test for CreateUser", () => {
     };
     await createUserEntity(newUser);
 
-    const response = await requestQuery(createUser, { data: newUser }, token);
+    const response = await requestQuery(agent, createUser, { data: newUser }, token);
     expect(response.body.errors[0].message).to.be.eq(ErrorMessage.email);
     expect(response.body.errors[0].code).to.be.eq(401);
   });
-
-  const createUserEntity = async (data: UserInput): Promise<void> => {
-    const user = new User();
-    user.email = data.email;
-    user.name = data.name;
-    user.password = CryptoService.encode(data.password);
-    user.birthDate = data.birthDate;
-
-    await repository.save(user);
-  };
-
-  const requestQuery = (query: string, variables: any, token: string): Test => {
-    return agent.post("/graphql").set("authorization", token).set("Accept", "application/json").send({
-      query,
-      variables,
-    });
-  };
 });
