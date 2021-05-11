@@ -21,8 +21,8 @@ export const resolvers = {
     },
     users: async (_: any, { data: args }: { data: UsersInput }, context: any): Promise<UsersType> => {
       verifyAuthOrFail(context);
-      const skip = Number(args?.skip) ?? 0;
-      const take = Number(args?.take) ?? 10;
+      const skip = +(args?.skip ?? 0);
+      const take = +(args?.take ?? 10);
 
       if (skip && skip < 0) {
         throw new InputError(undefined, "Parametro `skip` não pode ser negativo");
