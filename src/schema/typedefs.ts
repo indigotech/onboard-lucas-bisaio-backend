@@ -14,6 +14,10 @@ export const typeDefs = gql`
     rememberMe: Boolean
   }
 
+  input UserInput {
+    id: ID!
+  }
+
   type UserType {
     id: ID!
     name: String!
@@ -27,11 +31,12 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    createUser(data: CreateUserInput!): UserType
-    login(data: LoginInput!): LoginType
+    createUser(data: CreateUserInput!): UserType!
+    login(data: LoginInput!): LoginType!
   }
 
   type Query {
-    hello: String
+    hello: String!
+    user(data: UserInput!): UserType!
   }
 `;
