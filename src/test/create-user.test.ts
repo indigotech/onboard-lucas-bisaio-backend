@@ -31,8 +31,8 @@ describe("Test for CreateUser", () => {
   });
 
   const createUser = `
-    mutation CreateUser($data: UserInput!) {
-      createUser(user: $data) {
+    mutation CreateUser($data: CreateUserInput!) {
+      createUser(data: $data) {
         id
         name
         email

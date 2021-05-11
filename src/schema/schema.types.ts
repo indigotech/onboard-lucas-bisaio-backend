@@ -5,6 +5,10 @@ export interface UserType {
   birthDate?: string;
 }
 
+export interface UserInput {
+  id: number;
+}
+
 export interface CreateUserInput {
   name: string;
   email: string;
