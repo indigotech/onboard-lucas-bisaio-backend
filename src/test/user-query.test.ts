@@ -24,8 +24,8 @@ describe("Tests for User", () => {
     repository = getRepository(User);
   });
 
-  afterEach(() => {
-    repository.delete({});
+  afterEach(async () => {
+    await repository.delete({});
   });
 
   const userQuery = `
@@ -40,7 +40,6 @@ describe("Tests for User", () => {
   `;
   it("should return an user", async () => {
     const savedUser = await createUserEntity(user);
-    // const savedUser = await getRepository(User).findOne({ email: user.email });
     const id = savedUser?.id!;
     const token = JWTService.sign({ id });
 
@@ -66,7 +65,6 @@ describe("Tests for User", () => {
 
   it("should return an error - invalid token", async () => {
     const savedUser = await createUserEntity(user);
-    // const savedUser = await getRepository(User).findOne({ email: user.email });
     const id = savedUser?.id!;
     const invalidToken = "invalid-token";
 

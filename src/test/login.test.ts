@@ -22,8 +22,8 @@ describe("Tests for Login", () => {
     repository = getRepository(User);
   });
 
-  afterEach(() => {
-    repository.delete({});
+  afterEach(async () => {
+    await repository.delete({});
   });
 
   const login = `

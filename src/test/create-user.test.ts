@@ -26,8 +26,8 @@ describe("Test for CreateUser", () => {
     repository = getRepository(User);
   });
 
-  afterEach(() => {
-    repository.delete({});
+  afterEach(async () => {
+    await repository.delete({});
   });
 
   const createUser = `
