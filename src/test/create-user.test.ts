@@ -8,7 +8,7 @@ import { JWTService } from "../core/security/jwt";
 import { CryptoService } from "../core/security/crypto";
 import { ErrorMessage } from "../core/error";
 import { CreateUserInput, UserType } from "../schema/schema.types";
-import { createUserEntity, requestQuery } from "./common";
+import { createUserEntity, requestQuery, verifyError } from "./common";
 
 describe("Test for CreateUser", () => {
   let agent: SuperTest<Test>;
@@ -44,9 +44,12 @@ describe("Test for CreateUser", () => {
   it("should throw an error saying not logged in", async () => {
     const token = "";
     const response = await requestQuery(agent, createUser, { data: input }, token);
-    expect(response.body.errors[0].message).to.be.eq(ErrorMessage.token.invalid);
-    expect(response.body.errors[0].code).to.be.eq(401);
-    expect(response.body.errors[0].details).to.be.eq("Token not found");
+    const expectedError = {
+      message: ErrorMessage.token.invalid,
+      code: 401,
+      details: "Token not found",
+    };
+    verifyError(response.body.errors[0], expectedError);
   });
 
   it("should create a new user", async () => {
@@ -81,9 +84,12 @@ describe("Test for CreateUser", () => {
 
     const token = JWTService.sign({ id: 1 });
     const response = await requestQuery(agent, createUser, { data }, token);
-
-    expect(response.body.errors[0].message).to.be.eq(ErrorMessage.badlyFormattedPassword);
-    expect(response.body.errors[0].code).to.be.eq(401);
+    const expectedError = {
+      message: ErrorMessage.badlyFormattedPassword,
+      code: 401,
+      details: "Unauthorized",
+    };
+    verifyError(response.body.errors[0], expectedError);
   });
 
   it("should return an error saying invalid email", async () => {
@@ -97,7 +103,11 @@ describe("Test for CreateUser", () => {
     await createUserEntity(newUser);
 
     const response = await requestQuery(agent, createUser, { data: newUser }, token);
-    expect(response.body.errors[0].message).to.be.eq(ErrorMessage.email);
-    expect(response.body.errors[0].code).to.be.eq(401);
+    const expectedError = {
+      message: ErrorMessage.email,
+      code: 401,
+      details: "Unauthorized",
+    };
+    verifyError(response.body.errors[0], expectedError);
   });
 });

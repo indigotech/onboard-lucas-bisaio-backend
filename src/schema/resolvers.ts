@@ -34,7 +34,7 @@ export const resolvers = {
       await validateUser(user);
       user.password = CryptoService.encode(args.password);
 
-      return await getRepository(User).save(user);
+      return getRepository(User).save(user);
     },
 
     login: async (_: any, { data: args }: { data: LoginInput }): Promise<LoginType> => {
