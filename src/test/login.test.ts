@@ -5,9 +5,9 @@ import { Repository, getRepository } from "typeorm";
 import { User } from "../entity";
 import { JWTService } from "../core/security/jwt";
 import { CreateUserInput } from "../schema/schema.types";
-import { createUserEntity, requestQuery } from "./common";
+import { createUserEntity, requestQuery, verifyError } from "./common";
 
-describe("Test for Login", () => {
+describe("Tests for Login", () => {
   let agent: SuperTest<Test>;
   let repository: Repository<User>;
   const input: CreateUserInput = {
@@ -22,8 +22,8 @@ describe("Test for Login", () => {
     repository = getRepository(User);
   });
 
-  afterEach(() => {
-    repository.delete({});
+  afterEach(async () => {
+    await repository.delete({});
   });
 
   const login = `
@@ -80,12 +80,15 @@ describe("Test for Login", () => {
     };
 
     const response = await requestQuery(agent, login, { data });
-    expect(response.body.errors[0].message).to.be.eq("Usuário não encontrado");
-    expect(response.body.errors[0].code).to.be.eq(404);
-    expect(response.body.errors[0].details).to.be.eq("User not found");
+    const expectedError = {
+      message: "Usuário não encontrado",
+      code: 404,
+      details: "User not found",
+    };
+    verifyError(response.body.errors[0], expectedError);
   });
 
-  it("should say invalid password", async () => {
+  it("should return an error - invalid password", async () => {
     await createUserEntity(input);
 
     const data = {
@@ -94,8 +97,11 @@ describe("Test for Login", () => {
     };
 
     const response = await requestQuery(agent, login, { data });
-    expect(response.body.errors[0].message).to.be.eq("Credenciais inválidas. Tente novamente.");
-    expect(response.body.errors[0].code).to.be.eq(401);
-    expect(response.body.errors[0].details).to.be.eq("Unauthorized");
+    const expectedError = {
+      message: "Credenciais inválidas. Tente novamente.",
+      code: 401,
+      details: "Unauthorized",
+    };
+    verifyError(response.body.errors[0], expectedError);
   });
 });

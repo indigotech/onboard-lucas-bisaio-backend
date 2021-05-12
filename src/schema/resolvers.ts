@@ -22,7 +22,7 @@ export const resolvers = {
   },
 
   Mutation: {
-    createUser: async (_: any, { user: args }: { user: CreateUserInput }, context: any): Promise<UserType> => {
+    createUser: async (_: any, { data: args }: { data: CreateUserInput }, context: any): Promise<UserType> => {
       verifyAuthOrFail(context);
 
       const user = new User();
@@ -34,8 +34,7 @@ export const resolvers = {
       await validateUser(user);
       user.password = CryptoService.encode(args.password);
 
-      const newUser = await getRepository(User).save(user);
-      return newUser;
+      return getRepository(User).save(user);
     },
 
     login: async (_: any, { data: args }: { data: LoginInput }): Promise<LoginType> => {

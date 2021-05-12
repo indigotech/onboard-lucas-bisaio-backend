@@ -14,7 +14,7 @@ interface DecodedData {
 
 function sign(value: SignData): string {
   const { rememberMe, id } = value;
-  const expiresIn = rememberMe ? "7d" : process.env.TOKEN_TIMEOUT!;
+  const expiresIn = rememberMe ? "7d" : +process.env.TOKEN_TIMEOUT!;
 
   const token = jwt.sign({ data: id }, process.env.TOKEN_SECRET!, { expiresIn });
 
