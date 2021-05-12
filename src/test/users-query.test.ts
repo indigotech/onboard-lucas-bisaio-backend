@@ -15,13 +15,10 @@ describe("Tests of Users", async () => {
   before(async () => {
     agent = request(process.env.BASE_URL);
     repository = getRepository(User);
-  });
-
-  beforeEach(async () => {
     await populateDatabase();
   });
 
-  afterEach(async () => {
+  after(async () => {
     await repository.delete({});
   });
 
