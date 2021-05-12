@@ -37,7 +37,7 @@ export const resolvers = {
       const hasNextPage = skip + take < count;
 
       const users = await getRepository(User)
-        .createQueryBuilder("name")
+        .createQueryBuilder("user")
         .orderBy({ name: "ASC" })
         .take(take)
         .skip(skip)
