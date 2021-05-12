@@ -6,7 +6,7 @@ import { User, Address } from "../entity";
 import { AddressInput, CreateUserInput } from "../schema/schema.types";
 import { createUserEntity } from "./common";
 
-describe("Tests User Adress", () => {
+describe("Tests User Address", () => {
   let agent: SuperTest<Test>;
   let userRepository: Repository<User>;
   const input: CreateUserInput = {
