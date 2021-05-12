@@ -19,7 +19,8 @@ export const typeDefs = gql`
   }
 
   input UsersInput {
-    max: Int = 10
+    take: Int = 10
+    skip: Int = 0
   }
 
   type UserType {
@@ -34,6 +35,13 @@ export const typeDefs = gql`
     user: UserType!
   }
 
+  type UsersType {
+    users: [UserType]!
+    count: Int!
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+  }
+
   type Mutation {
     createUser(data: CreateUserInput!): UserType!
     login(data: LoginInput!): LoginType!
@@ -42,6 +50,6 @@ export const typeDefs = gql`
   type Query {
     hello: String!
     user(data: UserInput!): UserType!
-    users(data: UsersInput): [UserType]!
+    users(data: UsersInput): UsersType!
   }
 `;

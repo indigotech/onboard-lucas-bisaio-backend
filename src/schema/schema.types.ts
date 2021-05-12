@@ -10,7 +10,8 @@ export interface UserInput {
 }
 
 export interface UsersInput {
-  max?: number;
+  take?: number;
+  skip?: number;
 }
 
 export interface CreateUserInput {
@@ -29,4 +30,11 @@ export interface LoginInput {
 export interface LoginType {
   token: string;
   user: UserType;
+}
+
+export interface UsersType {
+  users: UserType[];
+  count: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
 }

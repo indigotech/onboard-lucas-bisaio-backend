@@ -1,9 +1,7 @@
 import { getRepository } from "typeorm";
-import { setup } from "./server";
-import { User } from "./entity";
+import { User } from "../entity";
 
-async function populateDatabase() {
-  await setup();
+export async function populateDatabase() {
   for (let i = 1; i <= 50; i++) {
     const fakeUser = new User();
     fakeUser.name = `fake user${i}`;
@@ -14,8 +12,3 @@ async function populateDatabase() {
     await getRepository(User).save(fakeUser);
   }
 }
-
-populateDatabase().then(() => {
-  console.log("Database was populated with 50 fake users");
-  process.exit(0);
-});

@@ -1,9 +1,9 @@
 import { getRepository } from "typeorm";
 import { CryptoService } from "../core/security/crypto";
-import { NotFoundError } from "../core/error/error-messages";
+import { NotFoundError, InputError } from "../core/error/error-messages";
 import { validateLogin } from "../domain/login-validation.use-case";
 import { validateUser, verifyAuthOrFail } from "../domain/user-validation.use-case";
-import { LoginInput, LoginType, CreateUserInput, UserType, UserInput, UsersInput } from "./schema.types";
+import { LoginInput, LoginType, CreateUserInput, UserType, UserInput, UsersInput, UsersType } from "./schema.types";
 import { User } from "../entity";
 
 export const resolvers = {
@@ -19,14 +19,31 @@ export const resolvers = {
 
       return user;
     },
-    users: (_: any, { data: args }: { data: UsersInput }, context: any): Promise<UserInput[]> => {
+    users: async (_: any, { data: args }: { data: UsersInput }, context: any): Promise<UsersType> => {
       verifyAuthOrFail(context);
+      const skip = args?.skip ?? 0;
+      const take = args?.take ?? 10;
 
-      return getRepository(User)
+      if (skip && skip < 0) {
+        throw new InputError(undefined, "`skip` should not be negative");
+      }
+
+      if (take && take <= 0) {
+        throw new InputError(undefined, "`take` should be positive not null");
+      }
+
+      const count = await getRepository(User).count();
+      const hasPreviousPage = skip > 0;
+      const hasNextPage = skip + take < count;
+
+      const users = await getRepository(User)
         .createQueryBuilder("user")
         .orderBy({ name: "ASC" })
-        .take(args?.max ?? 10)
+        .take(take)
+        .skip(skip)
         .getMany();
+
+      return { users, count, hasNextPage, hasPreviousPage };
     },
   },
 
