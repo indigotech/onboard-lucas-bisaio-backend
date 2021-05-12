@@ -3,6 +3,7 @@ export interface UserType {
   name: string;
   email: string;
   birthDate?: string;
+  address: AddressInput;
 }
 
 export interface UserInput {
