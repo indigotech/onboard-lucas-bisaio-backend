@@ -19,8 +19,8 @@ export const typeDefs = gql`
   }
 
   input UsersInput {
-    take: Int
-    skip: Int
+    take: Int = 10
+    skip: Int = 0
   }
 
   type UserType {
