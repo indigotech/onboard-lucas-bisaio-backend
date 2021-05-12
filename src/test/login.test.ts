@@ -56,20 +56,38 @@ describe("Tests for Login", () => {
     expect(+response.body.data.login.user.id).to.be.greaterThan(0);
   });
 
-  it("should verify the token", async () => {
-    const validToken = JWTService.sign({ id: 1 });
+  it("should verify the token without remember me", async () => {
+    await createUserEntity(input);
+    const currentUser = await getRepository(User).findOne({ email: input.email });
+    const data = {
+      email: input.email,
+      password: input.password,
+    };
+
+    const response = await requestQuery(agent, login, { data });
+    const validToken: string = response.body.data.login.token;
     expect(JWTService.verify(validToken)).to.be.true;
 
     const decoded = JWTService.decode(validToken);
-    expect(decoded.data).to.be.eq(1);
+    expect(decoded.data).to.be.eq(currentUser?.id);
     expect(+decoded.exp - +decoded.iat).to.be.eq(+process.env.TOKEN_TIMEOUT!);
+  });
+  it("should verify the token with remember me", async () => {
+    await createUserEntity(input);
+    const currentUser = await getRepository(User).findOne({ email: input.email });
+    const data = {
+      email: input.email,
+      password: input.password,
+      rememberMe: true,
+    };
 
-    const rememberMeToken = JWTService.sign({ id: 1, rememberMe: true });
+    const response = await requestQuery(agent, login, { data });
+    const rememberMeToken: string = response.body.data.login.token;
     expect(JWTService.verify(rememberMeToken)).to.be.true;
 
-    const rememberMeDecoded = JWTService.decode(rememberMeToken);
-    expect(rememberMeDecoded.data).to.be.eq(1);
     const secondsInWeek = 3600 * 24 * 7;
+    const rememberMeDecoded = JWTService.decode(rememberMeToken);
+    expect(rememberMeDecoded.data).to.be.eq(currentUser?.id);
     expect(+rememberMeDecoded.exp - +rememberMeDecoded.iat).to.be.eq(new Date(secondsInWeek).getTime());
   });
 
