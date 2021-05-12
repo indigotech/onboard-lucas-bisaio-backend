@@ -19,8 +19,8 @@ export const typeDefs = gql`
   }
 
   input UsersInput {
-    take: ID
-    skip: ID
+    take: Int
+    skip: Int
   }
 
   type UserType {
@@ -37,7 +37,7 @@ export const typeDefs = gql`
 
   type UsersType {
     users: [UserType]!
-    count: ID!
+    count: Int!
     hasNextPage: Boolean!
     hasPreviousPage: Boolean!
   }

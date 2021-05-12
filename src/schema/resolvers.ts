@@ -25,11 +25,11 @@ export const resolvers = {
       const take = +(args?.take ?? 10);
 
       if (skip && skip < 0) {
-        throw new InputError(undefined, "Parametro `skip` não pode ser negativo");
+        throw new InputError(undefined, "`skip` should not be negative");
       }
 
       if (take && take <= 0) {
-        throw new InputError(undefined, "Parâmetro `take` deve ser positivo não nulo");
+        throw new InputError(undefined, "`take` should be positive not null");
       }
 
       const count = await getRepository(User).count();
