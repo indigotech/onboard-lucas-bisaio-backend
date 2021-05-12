@@ -49,6 +49,7 @@ export const typeDefs = gql`
     city: String!
     neighborhood: String!
     street: String!
+    number: Int!
   }
 
   type Mutation {
