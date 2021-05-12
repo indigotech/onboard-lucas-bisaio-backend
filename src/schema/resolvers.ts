@@ -19,10 +19,10 @@ export const resolvers = {
 
       return user;
     },
-    users: async (_: any, { data: args }: { data: UsersInput }, context: any): Promise<UserInput[]> => {
+    users: (_: any, { data: args }: { data: UsersInput }, context: any): Promise<UserInput[]> => {
       verifyAuthOrFail(context);
 
-      return await getRepository(User)
+      return getRepository(User)
         .createQueryBuilder("name")
         .orderBy({ name: "ASC" })
         .take(args?.max ?? 10)
@@ -46,8 +46,8 @@ export const resolvers = {
       return getRepository(User).save(user);
     },
 
-    login: async (_: any, { data: args }: { data: LoginInput }): Promise<LoginType> => {
-      return await validateLogin(args);
+    login: (_: any, { data: args }: { data: LoginInput }): Promise<LoginType> => {
+      return validateLogin(args);
     },
   },
 };
