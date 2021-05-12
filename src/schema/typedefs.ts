@@ -18,6 +18,10 @@ export const typeDefs = gql`
     id: ID!
   }
 
+  input UsersInput {
+    max: Int = 10
+  }
+
   type UserType {
     id: ID!
     name: String!
@@ -38,5 +42,6 @@ export const typeDefs = gql`
   type Query {
     hello: String!
     user(data: UserInput!): UserType!
+    users(data: UsersInput): [UserType]!
   }
 `;

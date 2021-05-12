@@ -3,7 +3,7 @@ import { CryptoService } from "../core/security/crypto";
 import { NotFoundError } from "../core/error/error-messages";
 import { validateLogin } from "../domain/login-validation.use-case";
 import { validateUser, verifyAuthOrFail } from "../domain/user-validation.use-case";
-import { LoginInput, LoginType, CreateUserInput, UserType, UserInput } from "./schema.types";
+import { LoginInput, LoginType, CreateUserInput, UserType, UserInput, UsersInput } from "./schema.types";
 import { User } from "../entity";
 
 export const resolvers = {
@@ -18,6 +18,15 @@ export const resolvers = {
       }
 
       return user;
+    },
+    users: (_: any, { data: args }: { data: UsersInput }, context: any): Promise<UserInput[]> => {
+      verifyAuthOrFail(context);
+
+      return getRepository(User)
+        .createQueryBuilder("user")
+        .orderBy({ name: "ASC" })
+        .take(args?.max ?? 10)
+        .getMany();
     },
   },
 
@@ -37,8 +46,8 @@ export const resolvers = {
       return getRepository(User).save(user);
     },
 
-    login: async (_: any, { data: args }: { data: LoginInput }): Promise<LoginType> => {
-      return await validateLogin(args);
+    login: (_: any, { data: args }: { data: LoginInput }): Promise<LoginType> => {
+      return validateLogin(args);
     },
   },
 };

@@ -33,8 +33,8 @@ interface VerifyErrorParams {
   details?: string;
 }
 
-export const verifyError = (sended: VerifyErrorParams, expected: VerifyErrorParams) => {
-  expect(sended.message).to.be.eq(expected.message);
-  expect(sended.code).to.be.eq(expected.code);
-  expect(sended.details).to.be.eq(expected.details);
+export const verifyError = (received: VerifyErrorParams, expected: VerifyErrorParams) => {
+  expect(received.message).to.be.eq(expected.message);
+  expect(received.code).to.be.eq(expected.code);
+  expect(received.details).to.be.eq(expected.details);
 };
