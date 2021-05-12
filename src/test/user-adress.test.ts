@@ -1,9 +1,9 @@
 import { expect } from "chai";
-import { AddressInput, CreateUserInput } from "schema/schema.types";
 import request, { SuperTest, Test } from "supertest";
 import { Repository, getRepository } from "typeorm";
 
 import { User, Address } from "../entity";
+import { AddressInput, CreateUserInput } from "../schema/schema.types";
 import { createUserEntity } from "./common";
 
 describe("Tests User Adress", () => {
