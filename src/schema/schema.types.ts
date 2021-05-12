@@ -3,7 +3,7 @@ export interface UserType {
   name: string;
   email: string;
   birthDate?: string;
-  address: AddressInput;
+  address: AddressInput[];
 }
 
 export interface UserInput {
@@ -46,4 +46,5 @@ export interface AddressInput {
   neighborhood: string;
   street: string;
   number: number;
+  user: UserType;
 }

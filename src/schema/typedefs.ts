@@ -28,7 +28,7 @@ export const typeDefs = gql`
     name: String!
     email: String!
     birthDate: String
-    address: AddressType!
+    address: [AddressType!]
   }
 
   type LoginType {
@@ -37,7 +37,7 @@ export const typeDefs = gql`
   }
 
   type UsersType {
-    users: [UserType]!
+    users: [UserType!]
     count: Int!
     hasNextPage: Boolean!
     hasPreviousPage: Boolean!
