@@ -23,7 +23,7 @@ export const resolvers = {
       verifyAuthOrFail(context);
 
       return getRepository(User)
-        .createQueryBuilder("name")
+        .createQueryBuilder("user")
         .orderBy({ name: "ASC" })
         .take(args?.max ?? 10)
         .getMany();
