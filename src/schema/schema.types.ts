@@ -38,3 +38,11 @@ export interface UsersType {
   hasNextPage: boolean;
   hasPreviousPage: boolean;
 }
+
+export interface AddressInput {
+  state: string;
+  city: string;
+  neighborhood: string;
+  street: string;
+  number: number;
+}

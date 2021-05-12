@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import { Adress } from "./Adress";
+import { Address } from "./Address";
 
 @Entity()
 export class User {
@@ -18,6 +18,6 @@ export class User {
   @Column({ nullable: true })
   birthDate?: string;
 
-  @OneToMany(() => Adress, (adress) => adress.user)
-  adress: Adress[];
+  @OneToMany(() => Address, (address) => address.user)
+  address: Address[];
 }

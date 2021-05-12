@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from "typeorm";
 import { User } from "./User";
 
 @Entity()
-export class Adress {
+export class Address {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -13,8 +13,14 @@ export class Adress {
   city: string;
 
   @Column()
-  neighbour: string;
+  neighborhood: string;
 
-  @ManyToMany(() => User, (user) => user.adress)
+  @Column()
+  street: string;
+
+  @Column()
+  number: number;
+
+  @ManyToMany(() => User, (user) => user.address)
   user?: string;
 }
