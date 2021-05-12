@@ -6,7 +6,7 @@ import { requestQuery, verifyError } from "./common";
 import { User } from "../entity";
 import { populateDatabase } from "../seed/populate-db";
 import { JWTService } from "../core/security/jwt";
-import { UserType } from "../schema";
+import { UsersType, UserType } from "../schema";
 
 describe("Tests of Users", async () => {
   let agent: SuperTest<Test>;
@@ -33,6 +33,13 @@ describe("Tests of Users", async () => {
           id
           email
           birthDate
+          address {
+            state
+            city
+            neighborhood
+            street
+            number
+          }
         }
       }
     }
@@ -42,7 +49,7 @@ describe("Tests of Users", async () => {
 
     const response = await requestQuery(agent, queryUsers, { data: {} }, token);
 
-    const data = response.body.data.users;
+    const data: UsersType = response.body.data.users;
     expect(data.users.length).to.be.eq(10);
     expect(data.hasNextPage).to.be.true;
     expect(data.hasPreviousPage).to.be.false;

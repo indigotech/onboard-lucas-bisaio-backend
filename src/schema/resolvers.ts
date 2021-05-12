@@ -12,7 +12,7 @@ export const resolvers = {
     user: async (_: any, { data: args }: { data: UserInput }, context: any): Promise<UserType> => {
       verifyAuthOrFail(context);
 
-      const user = await getRepository(User).findOne({ id: args.id });
+      const user = await getRepository(User).findOne({ id: args.id }, { relations: ["address"] });
       if (!user) {
         throw new NotFoundError();
       }
@@ -36,12 +36,12 @@ export const resolvers = {
       const hasPreviousPage = skip > 0;
       const hasNextPage = skip + take < count;
 
-      const users = await getRepository(User)
-        .createQueryBuilder("user")
-        .orderBy({ name: "ASC" })
-        .take(take)
-        .skip(skip)
-        .getMany();
+      const users = await getRepository(User).find({
+        order: { name: "ASC" },
+        take,
+        skip,
+        relations: ["address"],
+      });
 
       return { users, count, hasNextPage, hasPreviousPage };
     },

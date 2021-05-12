@@ -27,8 +27,8 @@ export const typeDefs = gql`
     id: ID!
     name: String!
     email: String!
-    birthDate: String
     address: [AddressType!]
+    birthDate: String
   }
 
   type LoginType {
@@ -49,7 +49,6 @@ export const typeDefs = gql`
     city: String!
     neighborhood: String!
     street: String!
-    user: UserType!
   }
 
   type Mutation {

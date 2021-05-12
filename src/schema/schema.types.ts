@@ -46,5 +46,4 @@ export interface AddressInput {
   neighborhood: string;
   street: string;
   number: number;
-  user: UserType;
 }
