@@ -46,7 +46,7 @@ describe("Tests of Users", async () => {
     expect(data.users.length).to.be.eq(10);
     expect(data.hasNextPage).to.be.true;
     expect(data.hasPreviousPage).to.be.false;
-    expect(+data.count).to.be.eq(50);
+    expect(data.count).to.be.eq(50);
   });
 
   it("should return a sorted list of 20 valid users", async () => {
