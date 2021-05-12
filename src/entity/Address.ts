@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
 import { User } from "./User";
 
 @Entity()
@@ -21,6 +21,9 @@ export class Address {
   @Column()
   number: number;
 
-  @ManyToMany(() => User, (user) => user.address)
-  user?: string;
+  @ManyToOne(() => User, (user) => user.address, {
+    cascade: true,
+    onDelete: "CASCADE",
+  })
+  user: User;
 }
