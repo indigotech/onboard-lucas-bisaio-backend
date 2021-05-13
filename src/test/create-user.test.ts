@@ -22,7 +22,7 @@ describe("Test for CreateUser", () => {
 
   before(async () => {
     await setup();
-    agent = request(`${process.env.BASE_URL}`);
+    agent = request(process.env.BASE_URL);
     repository = getRepository(User);
   });
 

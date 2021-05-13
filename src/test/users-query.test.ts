@@ -13,7 +13,7 @@ describe("Tests of Users", async () => {
   let repository: Repository<User>;
 
   before(async () => {
-    agent = request(`${process.env.BASE_URL}`);
+    agent = request(process.env.BASE_URL);
     repository = getRepository(User);
     await populateDatabase();
   });

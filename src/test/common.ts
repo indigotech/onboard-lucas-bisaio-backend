@@ -4,9 +4,9 @@ import { expect } from "chai";
 
 import { CryptoService } from "../core/security/crypto";
 import { User } from "../entity";
-import { CreateUserInput, UserType } from "../schema/schema.types";
+import { CreateUserInput } from "../schema/schema.types";
 
-export const createUserEntity = async (data: CreateUserInput): Promise<UserType> => {
+export const createUserEntity = async (data: CreateUserInput): Promise<User> => {
   const user = new User();
   user.email = data.email;
   user.name = data.name;

@@ -18,7 +18,7 @@ describe("Tests for Login", () => {
   };
 
   before(() => {
-    agent = request(`${process.env.BASE_URL}`);
+    agent = request(process.env.BASE_URL);
     repository = getRepository(User);
   });
 
