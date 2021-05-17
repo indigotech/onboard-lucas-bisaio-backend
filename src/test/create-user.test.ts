@@ -10,7 +10,7 @@ import { ErrorMessage } from "../core/error";
 import { CreateUserInput, UserType } from "../schema/schema.types";
 import { createUserEntity, requestQuery, verifyError } from "./common";
 
-describe("Test for CreateUser", () => {
+describe("Tests for CreateUser", () => {
   let agent: SuperTest<Test>;
   let repository: Repository<User>;
   const input: CreateUserInput = {

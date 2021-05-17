@@ -27,6 +27,7 @@ export const typeDefs = gql`
     id: ID!
     name: String!
     email: String!
+    address: [AddressType!]
     birthDate: String
   }
 
@@ -36,10 +37,19 @@ export const typeDefs = gql`
   }
 
   type UsersType {
-    users: [UserType]!
+    users: [UserType!]
     count: Int!
     hasNextPage: Boolean!
     hasPreviousPage: Boolean!
+  }
+
+  type AddressType {
+    id: Int!
+    state: String!
+    city: String!
+    neighborhood: String!
+    street: String!
+    number: Int!
   }
 
   type Mutation {

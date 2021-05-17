@@ -6,7 +6,7 @@ import { requestQuery, verifyError } from "./common";
 import { User } from "../entity";
 import { populateDatabase } from "../seed/populate-db";
 import { JWTService } from "../core/security/jwt";
-import { UserType } from "../schema";
+import { UsersType, UserType } from "../schema";
 
 describe("Tests of Users", async () => {
   let agent: SuperTest<Test>;
@@ -33,6 +33,13 @@ describe("Tests of Users", async () => {
           id
           email
           birthDate
+          address {
+            state
+            city
+            neighborhood
+            street
+            number
+          }
         }
       }
     }
@@ -42,7 +49,7 @@ describe("Tests of Users", async () => {
 
     const response = await requestQuery(agent, queryUsers, { data: {} }, token);
 
-    const data = response.body.data.users;
+    const data: UsersType = response.body.data.users;
     expect(data.users.length).to.be.eq(10);
     expect(data.hasNextPage).to.be.true;
     expect(data.hasPreviousPage).to.be.false;
@@ -59,9 +66,7 @@ describe("Tests of Users", async () => {
     const orderByName = users.sort((a, b) => a.name.localeCompare(b.name));
     expect(users).to.be.eq(orderByName);
 
-    users.map((user) => {
-      verifyUser(user);
-    });
+    users.map(verifyUser);
   });
 
   it("should return a list of 35 first valid users", async () => {
@@ -154,9 +159,18 @@ describe("Tests of Users", async () => {
     expect(response.body.data.users.hasPreviousPage).to.be.true;
   });
 
+  it("should create 20 fake address", async () => {
+    const token = JWTService.sign({ id: 1 });
+
+    const response = await requestQuery(agent, queryUsers, { data: {} }, token);
+    const users: UserType[] = response.body.data.users.users;
+    users.map(verifyUser);
+  });
+
   const verifyUser = (user: UserType) => {
     expect(user.name).to.not.be.empty;
     expect(user.email).to.not.be.empty;
     expect(user.id).to.not.be.empty;
+    expect(user.address.length).to.be.eq(2);
   };
 });

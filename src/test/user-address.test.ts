@@ -2,13 +2,14 @@ import { expect } from "chai";
 import request, { SuperTest, Test } from "supertest";
 import { Repository, getRepository } from "typeorm";
 
-import { User, Address } from "../entity";
+import { User } from "../entity";
 import { AddressInput, CreateUserInput } from "../schema/schema.types";
-import { createUserEntity } from "./common";
+import { createUserEntity, createAddressAndSave } from "./common";
 
 describe("Tests User Address", () => {
   let agent: SuperTest<Test>;
   let userRepository: Repository<User>;
+
   const input: CreateUserInput = {
     name: "admin",
     email: "admin@taqtile.com.br",
@@ -42,26 +43,16 @@ describe("Tests User Address", () => {
   });
 
   it("should save in repository", async () => {
-    const address1 = createAddressEntity(fakeAddress1);
-    const address2 = createAddressEntity(fakeAddress2);
+    const address1 = await createAddressAndSave(fakeAddress1);
+    const address2 = await createAddressAndSave(fakeAddress2);
     const user = await createUserEntity(input);
 
     user.address = [address1, address2];
     await userRepository.save(user);
 
-    const response = await userRepository.findOne({ email: user.email });
-    expect(response?.address?.[0].id).to.be.eq(address1.id);
-    expect(response?.address?.[1].id).to.be.eq(address2.id);
+    const response = await userRepository.findOne({ email: user.email }, { relations: ["address"] });
+
+    expect(response?.address?.[0].id).to.be.deep.eq(address1.id);
+    expect(response?.address?.[1].id).to.be.deep.eq(address2.id);
   });
-
-  const createAddressEntity = (address: AddressInput): Address => {
-    const userAddress = new Address();
-    userAddress.state = address.state;
-    userAddress.city = address.city;
-    userAddress.neighborhood = address.neighborhood;
-    userAddress.street = address.street;
-    userAddress.number = address.number;
-
-    return userAddress;
-  };
 });

@@ -22,7 +22,6 @@ export class Address {
   number: number;
 
   @ManyToOne(() => User, (user) => user.address, {
-    cascade: true,
     onDelete: "CASCADE",
   })
   user: User;

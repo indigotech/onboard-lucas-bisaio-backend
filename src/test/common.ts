@@ -3,8 +3,8 @@ import { Test, SuperTest } from "supertest";
 import { expect } from "chai";
 
 import { CryptoService } from "../core/security/crypto";
-import { User } from "../entity";
-import { CreateUserInput } from "../schema/schema.types";
+import { User, Address } from "../entity";
+import { CreateUserInput, AddressInput } from "../schema/schema.types";
 
 export const createUserEntity = async (data: CreateUserInput): Promise<User> => {
   const user = new User();
@@ -37,4 +37,15 @@ export const verifyError = (received: VerifyErrorParams, expected: VerifyErrorPa
   expect(received.message).to.be.eq(expected.message);
   expect(received.code).to.be.eq(expected.code);
   expect(received.details).to.be.eq(expected.details);
+};
+
+export const createAddressAndSave = async (address: AddressInput): Promise<Address> => {
+  const userAddress = new Address();
+  userAddress.state = address.state;
+  userAddress.city = address.city;
+  userAddress.neighborhood = address.neighborhood;
+  userAddress.street = address.street;
+  userAddress.number = address.number;
+
+  return await getRepository(Address).save(userAddress);
 };
